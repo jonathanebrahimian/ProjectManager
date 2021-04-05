@@ -43,7 +43,17 @@ CREATE TABLE goals(
 );
 
 
--- insert sample entry
-INSERT INTO `db`.`test_table` (`value`) VALUES ('Sample Value');
+
+
+CREATE USER 'exampleuser'@'%' 
+	IDENTIFIED BY 'password';
+
+ALTER USER exampleuser 
+IDENTIFIED WITH mysql_native_password BY 'password';
+
+GRANT ALL PRIVILEGES ON *.* 
+	TO 'exampleuser'@'%' 
+	WITH GRANT OPTION;
+
 
 
