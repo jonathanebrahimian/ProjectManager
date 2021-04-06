@@ -20,6 +20,12 @@ function App () {
     setNumber(e.target.value);
   }
 
+  const testValue = () => {
+    axios.get(`http://${url}:8000/values`).then((res) => {
+      console.log(res.data)
+    })
+  }
+
   const fetchBase = () => {
     axios.get(`http://${url}:8000/`).then((res)=>{
       alert(res.data);
@@ -69,13 +75,14 @@ function App () {
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-        <button onClick={reset}> Reset DB </button>
-        <form onSubmit={handleSubmit}>
+        {/* <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
+        <button onClick={reset}> Reset DB </button> */}
+        <button onClick={testValue}> TEST </button>
+        {/* <form onSubmit={handleSubmit}>
           <input type="text" value={number} onChange={handleChange}/>
           <br/>
           <input type="submit" value="Submit" />
-        </form>
+        </form> */}
         <ul>
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
         </ul>
