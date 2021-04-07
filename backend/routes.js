@@ -112,10 +112,12 @@ module.exports = function routes(app, logger) {
 		  let inventory = req.body.inventory;
 		  let quality = req.body.quality;
 		  let supplier = req.body.supplier;
-		  let siteID = req.body.siteID;
+      let siteID = req.body.siteID;
+		  let userID = req.body.userID;
+      
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier, siteID) VALUES (?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier, siteID], function (err, rows, fields) {
+        connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier,userID, siteID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier,userID, siteID], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
