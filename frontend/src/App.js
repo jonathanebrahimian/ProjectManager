@@ -32,6 +32,20 @@ function App () {
     })
   }
 
+  // let id = req.body.id;
+  // let name = req.body.name;
+  // let statusIn = req.body.status;
+  // let inventory = req.body.inventory;
+  // let quality = req.body.quality;
+  // let supplier = req.body.supplier;
+  // let siteID = req.body.siteID;
+  const postMaterials = () => {
+    temp = {
+       
+    }
+    axios.post(`http://${url}:8000/post/materials`, {data: temp})
+  }
+
   // fetches vals of db via GET request
   const fetchVals = () => {
     axios.get(`http://${url}:8000/values`).then(
