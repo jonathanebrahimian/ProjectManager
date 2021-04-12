@@ -152,15 +152,15 @@ module.exports = function routes(app, logger) {
             logger.error("Problem getting from test table: \n", err);
             res.status(400).send('Problem getting from table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);    // change to res.end(JSON.stringify(result));
+            res.end(JSON.stringify(result));
           }
         });
       }
     });
   });
 
-    // GET /materialrequests/{supplierID}
-    app.get('/materialrequests/:supplierID', (req, res) => {
+    // GET /materialrequests/{supplierID}     // requested materials for specific supplier
+    app.get('/materials/:supplier', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -169,18 +169,46 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
-        let supplierID = req.params.supplierID;
+        let supplier = req.params.supplier;
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT * FROM materialrequests WHERE siteID = ?", [supplierID], function (err, rows, fields) {
+          connection.query("SELECT * FROM materials WHERE supplier = ? && status = 0", [supplier], function (err, rows, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
-              res.status(200).send(`added ${req.body.product} to the table!`);    // change to res.end(JSON.stringify(result));
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+    // GET /materials/{siteID}    materials accepted but not delivered
+    app.get('/materials/:siteID', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+        let siteID = req.params.siteID;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("SELECT * FROM materials WHERE siteID = ? && status = 1", [siteID], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.end(JSON.stringify(result));
             }
           });
         }
