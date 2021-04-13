@@ -96,7 +96,7 @@ module.exports = function routes(app, logger) {
     });
   });
   
-  // POST /multplynumber
+  // POST /materials
   app.post('/materials', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
@@ -124,7 +124,8 @@ module.exports = function routes(app, logger) {
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.end(JSON.stringify(result));
+            //res.status(200).send(`added ${req.body.product} to the table!`);
           }
         });
       }
