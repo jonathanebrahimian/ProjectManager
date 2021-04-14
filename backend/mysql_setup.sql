@@ -39,6 +39,18 @@ create table users (
     , password varchar (50)
 );
 
+-- Equipment Lauren
+create table equipment (
+	equipmentID int not null
+		AUTO_INCREMENT primary key
+    , equipmentName varchar(20)
+    , location varchar(20)
+    , siteID int
+    , foreign key (siteID) references sites (siteID)
+    , userID int default null
+    , foreign key (userID) references users (userID)
+);
+
 
 -- create Goals Table
 CREATE TABLE goals(
