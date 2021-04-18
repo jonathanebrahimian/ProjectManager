@@ -7,9 +7,9 @@ import { Link, Switch, Route, NavLink} from "react-router-dom";
 
 function Logreg(){
     return(
-        <div className = "Logreg">
+        <div className = "Logreg" style = {{textAlign:"center"}}>
             <h2>Construction Manager</h2>
-            <Link exact to ="/" >Login </Link>
+            <NavLink  activeClassName = "is-active" to ="/" >Login </NavLink>
             <NavLink  activeClassName = "is-active" to = "/register">Register</NavLink>
 
         <hr />
