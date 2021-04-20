@@ -9,7 +9,6 @@ import { Nav } from './Nav';
 function Logreg(){
     return(
         <div className = "Logreg" style = {{textAlign:"center"}}>
-            <Nav />
             <NavLink  activeClassName = "is-active" to ="/" >Login </NavLink>
             <NavLink  activeClassName = "is-active" to = "/register">Register</NavLink>
 
