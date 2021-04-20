@@ -4,11 +4,12 @@ import Login from './Login';
 import Register from './Register';
 
 import { Link, Switch, Route, NavLink} from "react-router-dom";
+import { Nav } from './Nav';
 
 function Logreg(){
     return(
         <div className = "Logreg" style = {{textAlign:"center"}}>
-            <h2>Construction Manager</h2>
+            <Nav />
             <NavLink  activeClassName = "is-active" to ="/" >Login </NavLink>
             <NavLink  activeClassName = "is-active" to = "/register">Register</NavLink>
 
