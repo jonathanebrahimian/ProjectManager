@@ -467,7 +467,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO site (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
@@ -475,24 +475,23 @@ module.exports = function routes(app, logger) {
                   } else {
                     console.log("SUCCESSFUL INSERT");
 
-                    siteID = result['siteID'];
+                    siteID = result['insertId'];
     
-                    //res.end(JSON.stringify(result));
-                    // res.status(200).send(JSON.stringify(result));
+                    connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, result, fields) {
+                      connection.release();
+                      if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem inserting into test table: \n", err);
+                        res.status(400).send('Problem inserting into table'); 
+                      } else {
+                        console.log("SUCCESSFUL INSERT");
+                        //res.end(JSON.stringify(result));
+                        res.status(200).send('Site Created!');
+                      }
+                    });
                   }
                 });
-                connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, result, fields) {
-                  connection.release();
-                  if (err) {
-                    // if there is an error with the query, log the error
-                    logger.error("Problem inserting into test table: \n", err);
-                    res.status(400).send('Problem inserting into table'); 
-                  } else {
-                    console.log("SUCCESSFUL INSERT");
-                    //res.end(JSON.stringify(result));
-                    res.status(200).send('Site Created!');
-                  }
-                });
+                
             }
         });
       });
