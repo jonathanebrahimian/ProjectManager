@@ -113,7 +113,9 @@ module.exports = function routes(app, logger) {
 		  let quality = req.body.quality;
 		  let supplier = req.body.supplier;
       let siteID = req.body.siteID;
-		  let userID = req.body.userID;
+      let userID = req.body.userID;
+      
+      console.log(userID);
       
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
