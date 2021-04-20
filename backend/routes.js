@@ -96,7 +96,7 @@ module.exports = function routes(app, logger) {
     });
   });
   
-  // POST /multplynumber
+  // POST /materials
   app.post('/materials', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
@@ -126,7 +126,153 @@ module.exports = function routes(app, logger) {
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.end(JSON.stringify(result));
+            //res.status(200).send(`added ${req.body.product} to the table!`);
+          }
+        });
+      }
+    });
+  });
+
+  // GET /materials/{siteID}
+  app.get('/materials/:siteID', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      let siteID = req.params.siteID;
+
+		  //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("SELECT * FROM materials WHERE siteID = ?", [siteID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem getting from test table: \n", err);
+            res.status(400).send('Problem getting from table'); 
+          } else {
+            res.end(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+    // GET /materialrequests/{supplierID}     // requested materials for specific supplier
+    app.get('/materials/:supplier', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+        let supplier = req.params.supplier;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("SELECT * FROM materials WHERE supplier = ? && status = 0", [supplier], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+    // GET /materials/{siteID}    materials accepted but not delivered
+    app.get('/materials/:siteID', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+        let siteID = req.params.siteID;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("SELECT * FROM materials WHERE siteID = ? && status = 1", [siteID], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+    // POST /equipment{siteID}
+  app.post('/equipment', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+		  let equipmentID = req.body.equipmentID;
+		  let equipmentName = req.body.equipmentName;
+		  let location = req.body.location;
+      let siteID = req.body.siteID;
+		  let userID = req.body.userID;
+      
+		  //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID) VALUES (?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            res.end(JSON.stringify(result));
+            //res.status(200).send(`added ${req.body.product} to the table!`);
+          }
+        });
+      }
+    });
+  });
+
+  // GET /equipment/{siteID}
+  app.get('/equipment/:siteID', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      let siteID = req.params.siteID;
+
+		  //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem getting from test table: \n", err);
+            res.status(400).send('Problem getting from table'); 
+          } else {
+            res.end(JSON.stringify(result));
           }
         });
       }
