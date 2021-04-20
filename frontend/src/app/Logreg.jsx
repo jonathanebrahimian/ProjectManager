@@ -8,10 +8,9 @@ import { Nav } from './Nav';
 
 function Logreg(){
     return(
-        <div className = "Logreg">
+        <div className = "Logreg" style = {{textAlign:"center"}}>
             <Nav />
-            <h2>Construction Manager</h2>
-            <Link exact to ="/" >Login </Link>
+            <NavLink  activeClassName = "is-active" to ="/" >Login </NavLink>
             <NavLink  activeClassName = "is-active" to = "/register">Register</NavLink>
 
         <hr />
