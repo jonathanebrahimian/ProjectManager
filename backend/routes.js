@@ -119,7 +119,7 @@ module.exports = function routes(app, logger) {
       
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier,userID, siteID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier,userID, siteID], function (err, rows, fields) {
+        connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier,userID, siteID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier,userID, siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -148,7 +148,7 @@ module.exports = function routes(app, logger) {
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM materials WHERE siteID = ?", [siteID], function (err, rows, fields) {
+        connection.query("SELECT * FROM materials WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -176,7 +176,7 @@ module.exports = function routes(app, logger) {
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT * FROM materials WHERE supplier = ? && status = 0", [supplier], function (err, rows, fields) {
+          connection.query("SELECT * FROM materials WHERE supplier = ? && status = 0", [supplier], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -204,7 +204,7 @@ module.exports = function routes(app, logger) {
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT * FROM materials WHERE siteID = ? && status = 1", [siteID], function (err, rows, fields) {
+          connection.query("SELECT * FROM materials WHERE siteID = ? && status = 1", [siteID], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -236,7 +236,7 @@ module.exports = function routes(app, logger) {
       
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID) VALUES (?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID], function (err, rows, fields) {
+        connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID) VALUES (?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -265,7 +265,7 @@ module.exports = function routes(app, logger) {
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, rows, fields) {
+        connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
