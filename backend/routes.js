@@ -754,28 +754,20 @@ module.exports = function routes(app, logger) {
               }
           });
         
-            //updating start_date
-          connection.query("UPDATE sites SET start_date = ? WHERE siteID = ?", [start_date,siteID], function (err, results, fields) {
-              if (err) {
-                // if there is an error with the query, log the error
-                logger.error("Problem getting from test table: \n", err);
-                res.status(400).send('Problem getting from table'); 
-                } else {
-                  console.log("Updating Start Date");
-                }
-            });
-          
+          if(start_date !== undefined){
 
-            // Updating description
-          connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
-              if (err) {
-                // if there is an error with the query, log the error
-                logger.error("Problem getting from test table: \n", err);
-                res.status(400).send('Problem getting from table'); 
-                } else {
-                  console.log("Description Updated");
-                }
-            });
+            //updating start_date
+            connection.query("UPDATE sites SET start_date = ? WHERE siteID = ?", [start_date,siteID], function (err, results, fields) {
+                if (err) {
+                  // if there is an error with the query, log the error
+                  logger.error("Problem getting from test table: \n", err);
+                  res.status(400).send('Problem getting from table'); 
+                  } else {
+                    console.log("Updating Start Date");
+                  }
+              });
+          }
+          
           
           //updating description
           if(description !== undefined){
