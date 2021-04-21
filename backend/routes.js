@@ -742,17 +742,19 @@ module.exports = function routes(app, logger) {
             }
         });
 
+        if(end_date !== undefined){
+            //End Date
+            connection.query("UPDATE sites SET end_date = ? WHERE siteID = ?", [end_date,siteID], function (err, results, fields) {
+              if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem getting from test table: \n", err);
+                res.status(400).send('Problem getting from table'); 
+                } else {
+                  console.log("Updating End Date");
+                }
+            });
+        }
 
-        //End Date
-        connection.query("UPDATE sites SET end_date = ? WHERE siteID = ?", [end_date,siteID], function (err, results, fields) {
-            if (err) {
-              // if there is an error with the query, log the error
-              logger.error("Problem getting from test table: \n", err);
-              res.status(400).send('Problem getting from table'); 
-              } else {
-                console.log("Updating End Date");
-              }
-          });
         
           if(start_date !== undefined){
 
