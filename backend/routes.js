@@ -698,5 +698,110 @@ module.exports = function routes(app, logger) {
         });
       });
 
-  
+    // Put /equipment/{siteID}
+    app.put('/sites', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+      if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        let location = req.body.location;
+        let title = req.body.title;
+
+        let start_date = req.body.startDate;
+        let end_date = req.body.endDate;
+        let description = req.body.description;
+        let userID = req.body.userID;
+        let siteID = req.body.siteID;
+      
+          //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+        
+          //End Date
+        connection.query("UPDATE sites SET title = ? WHERE siteID = ?", [title,siteID], function (err, results, fields) {
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem getting from test table: \n", err);
+            res.status(400).send('Problem getting from table'); 
+            } else {
+              console.log("Updated title");
+            }
+        });
+
+        //Location
+        connection.query("UPDATE sites SET location = ? WHERE siteID = ?", [location,siteID], function (err, results, fields) {
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem getting from test table: \n", err);
+            res.status(400).send('Problem getting from table'); 
+            } else {
+              console.log("Updated location");
+            }
+        });
+
+
+        //End Date
+        connection.query("UPDATE sites SET end_date = ? WHERE siteID = ?", [end_date,siteID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updating End Date");
+              }
+          });
+        
+            //updating start_date
+          connection.query("UPDATE sites SET start_date = ? WHERE siteID = ?", [start_date,siteID], function (err, results, fields) {
+              if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem getting from test table: \n", err);
+                res.status(400).send('Problem getting from table'); 
+                } else {
+                  console.log("Updating Start Date");
+                }
+            });
+          
+
+            // Updating description
+          connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
+              if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem getting from test table: \n", err);
+                res.status(400).send('Problem getting from table'); 
+                } else {
+                  console.log("Description Updated");
+                }
+            });
+          
+          //updating description
+          connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
+              if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem getting from test table: \n", err);
+                res.status(400).send('Problem getting from table'); 
+                } else {
+                  console.log("Description Updated");
+                }
+            });
+          
+
+          //updateing userID
+          connection.query("UPDATE sites SET userID = ? WHERE siteID = ?", [userID,siteID], function (err, results, fields) {
+                connection.release();
+                if (err) {
+                  // if there is an error with the query, log the error
+                  logger.error("Problem getting from test table: \n", err);
+                  res.status(400).send('Problem getting from table'); 
+                  } else {
+                    res.end(JSON.stringify(result));
+                    }
+            });
+      }
+    });
+  });
+           
 }

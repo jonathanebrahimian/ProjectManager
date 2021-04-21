@@ -1,6 +1,5 @@
 USE db;
 
-
 -- create Materials Table
 CREATE TABLE `db`.`materials` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -46,6 +45,7 @@ CREATE TABLE goals(
     goalName varchar(20),
     goalNotes varchar(100),
     materials varchar(30),
+    end_date DATE,
     sitID INT NOT NULL,
     FOREIGN KEY (sitID) REFERENCES sites(siteID)  ON DELETE CASCADE
 );
