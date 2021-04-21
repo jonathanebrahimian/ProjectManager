@@ -708,6 +708,7 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
+        console.log("Inside put");
         let location = req.body.location;
         let title = req.body.title;
         let start_date = req.body.startDate;
@@ -777,28 +778,22 @@ module.exports = function routes(app, logger) {
             });
           
           //updating description
-          connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
+          if(description !== undefined){
+            connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
+              connection.release();
+                
               if (err) {
-                // if there is an error with the query, log the error
-                logger.error("Problem getting from test table: \n", err);
-                res.status(400).send('Problem getting from table'); 
-                } else {
-                  console.log("Description Updated");
-                }
-            });
-          
-
-          //updateing userID
-          connection.query("UPDATE sites SET userID = ? WHERE siteID = ?", [userID,siteID], function (err, results, fields) {
-                connection.release();
-                if (err) {
                   // if there is an error with the query, log the error
                   logger.error("Problem getting from test table: \n", err);
                   res.status(400).send('Problem getting from table'); 
                   } else {
-                    res.end(JSON.stringify(result));
-                    }
-            });
+                    res.end(JSON.stringify("Updated Successfully!"));
+                  }
+              });
+
+          }
+          
+          
       }
     });
   });
