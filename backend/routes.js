@@ -714,33 +714,36 @@ module.exports = function routes(app, logger) {
         let start_date = req.body.startDate;
         let end_date = req.body.endDate;
         let description = req.body.description;
-        let userID = req.body.userID;
         let siteID = req.body.siteID;
-      
-          //console.log(req.param);
-          // if there is no issue obtaining a connection, execute query and release connection
-        
-          //End Date
-        connection.query("UPDATE sites SET title = ? WHERE siteID = ?", [title,siteID], function (err, results, fields) {
-          if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem getting from test table: \n", err);
-            res.status(400).send('Problem getting from table'); 
-            } else {
-              console.log("Updated title");
-            }
-        });
 
-        //Location
-        connection.query("UPDATE sites SET location = ? WHERE siteID = ?", [location,siteID], function (err, results, fields) {
-          if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem getting from test table: \n", err);
-            res.status(400).send('Problem getting from table'); 
-            } else {
-              console.log("Updated location");
-            }
-        });
+        
+        if(title !== undefined){
+          //Title
+          connection.query("UPDATE sites SET title = ? WHERE siteID = ?", [title,siteID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+
+        if(location !== undefined){
+          //Location
+          connection.query("UPDATE sites SET location = ? WHERE siteID = ?", [location,siteID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated location");
+              }
+          });
+        }
+        
 
         if(end_date !== undefined){
             //End Date
