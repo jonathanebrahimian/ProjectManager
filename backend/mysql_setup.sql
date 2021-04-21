@@ -1,21 +1,17 @@
--- create database db
-CREATE DATABASE db;
-
--- use newly create database
 USE db;
 
+
 -- create Materials Table
-CREATE TABLE `db`.`Materials` (
+CREATE TABLE `db`.`materials` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(45),
     `status` INT,
+    `inventory` INT,
     `quality` INT,
-    FOREIGN KEY(`project`) REFERENCES `Project`.`id`,
     `supplierUser` INT,
     PRIMARY KEY(`id`),
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-    
-
+    sitID INT NOT NULL,
+    FOREIGN KEY (sitID) REFERENCES sites(siteID)  ON DELETE CASCADE
 );
 
 -- Users Lauren
@@ -23,37 +19,41 @@ create table users (
     userID int
 	AUTO_INCREMENT primary key
     , userType int
-    , userFirst varchar(50)
-    , userLast varchar (50)
-    , project int
-    , foreign key (project) references goals (goalID)
-    , reportsTo int default null
-    , foreign key (reportsTo) references users (userID)
+    , first_name varchar(50)
+    , last_name varchar (50)
+    , username varchar (50)
+    , password varchar (50)
+    , siteID int DEFAULT NULL
+    , foreign key (siteID) references sites (siteID)
+);
+
+-- Equipment Lauren
+create table equipment (
+	equipmentID int not null
+		AUTO_INCREMENT primary key
+    , equipmentName varchar(20)
+    , location varchar(20)
+    , siteID int
+    , foreign key (siteID) references sites (siteID)
+    , userID int default null
+    , foreign key (userID) references users (userID)
 );
 
 
 -- create Goals Table
 CREATE TABLE goals(
     goalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    FOREIGN KEY (goalID) REFERENCES 
     goalName varchar(20),
     goalNotes varchar(100),
     materials varchar(30),
-    constructionID INT
+    sitID INT NOT NULL,
+    FOREIGN KEY (sitID) REFERENCES sites(siteID)  ON DELETE CASCADE
 );
 
-
-
-
-CREATE USER 'exampleuser'@'%' 
-	IDENTIFIED BY 'password';
-
-ALTER USER exampleuser 
-IDENTIFIED WITH mysql_native_password BY 'password';
-
-GRANT ALL PRIVILEGES ON *.* 
-	TO 'exampleuser'@'%' 
-	WITH GRANT OPTION;
-
-
-
+CREATE TABLE sites(
+   siteID INT AUTO_INCREMENT PRIMARY KEY,
+   description varchar(250),
+   start_date DATE,
+   end_date DATE,
+   location varchar(100)
+);
