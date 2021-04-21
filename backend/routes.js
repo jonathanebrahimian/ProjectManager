@@ -710,7 +710,6 @@ module.exports = function routes(app, logger) {
       } else {
         let location = req.body.location;
         let title = req.body.title;
-
         let start_date = req.body.startDate;
         let end_date = req.body.endDate;
         let description = req.body.description;
