@@ -711,8 +711,8 @@ module.exports = function routes(app, logger) {
         console.log("Inside put");
         let location = req.body.location;
         let title = req.body.title;
-        let start_date = req.body.startDate;
-        let end_date = req.body.endDate;
+        let start_date = req.body.start_date;
+        let end_date = req.body.end_date;
         let description = req.body.description;
         let siteID = req.body.siteID;
 
