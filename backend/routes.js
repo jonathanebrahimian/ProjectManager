@@ -777,18 +777,22 @@ module.exports = function routes(app, logger) {
           //updating description
           if(description !== undefined){
             connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
-              connection.release();
                 
               if (err) {
                   // if there is an error with the query, log the error
                   logger.error("Problem getting from test table: \n", err);
                   res.status(400).send('Problem getting from table'); 
                   } else {
-                    res.end(JSON.stringify("Updated Successfully!"));
+                    console.log("Updated description!");    
                   }
               });
 
           }
+
+          connection.release();
+          res.end(JSON.stringify("Updated Successfully!"));
+
+
           
           
       }
