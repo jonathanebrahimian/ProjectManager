@@ -813,5 +813,58 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+<<<<<<< HEAD
   
+=======
+
+
+  // Put /checkout/{siteID}
+  app.put('/equipment', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+    if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+    } else {
+      console.log("Inside put");
+      let equipmentID = req.body.equipmentID;
+      let location = req.body.location;
+      
+      let userID = req.body.userID;
+      let now = undefined;
+
+      if(userID !== undefined){
+        now = new Date();
+      }
+
+      
+      
+        //Title
+      connection.query("UPDATE equipment SET location = ?,userID = ?,lastCheckout = ? WHERE equipmentID = ?", [location,userID,now,equipmentID], function (err, results, fields) {
+        if (err) {
+          // if there is an error with the query, log the error
+          logger.error("Problem getting from test table: \n", err);
+          res.status(400).send('Problem getting from table'); 
+          } else {
+            console.log("Updated title");
+          }
+      });
+      
+
+
+      
+
+        connection.release();
+        res.end(JSON.stringify("Updated Successfully!"));
+
+
+        
+        
+    }
+  });
+});
+           
+>>>>>>> e6dbe3fa0a676fd304d2a1cd02e76a4003fc84f8
 }
