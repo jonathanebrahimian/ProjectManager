@@ -280,7 +280,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT userID, first_name, last_name FROM users WHERE users.userType = 2", function (err, rows, fields) {
+        connection.query("SELECT userID, firstName, lastName FROM users WHERE users.userType = 2", function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
@@ -669,7 +669,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
@@ -711,8 +711,8 @@ module.exports = function routes(app, logger) {
         console.log("Inside put");
         let location = req.body.location;
         let title = req.body.title;
-        let start_date = req.body.start_date;
-        let end_date = req.body.end_date;
+        let startDate = req.body.startDate;
+        let startDate = req.body.endDate;
         let description = req.body.description;
         let siteID = req.body.siteID;
 
@@ -745,9 +745,9 @@ module.exports = function routes(app, logger) {
         }
         
 
-        if(end_date !== undefined){
+        if(endDate !== undefined){
             //End Date
-            connection.query("UPDATE sites SET end_date = ? WHERE siteID = ?", [end_date,siteID], function (err, results, fields) {
+            connection.query("UPDATE sites SET endDate = ? WHERE siteID = ?", [endDate,siteID], function (err, results, fields) {
               if (err) {
                 // if there is an error with the query, log the error
                 logger.error("Problem getting from test table: \n", err);
@@ -759,10 +759,10 @@ module.exports = function routes(app, logger) {
         }
 
         
-          if(start_date !== undefined){
+          if(startDate !== undefined){
 
-            //updating start_date
-            connection.query("UPDATE sites SET start_date = ? WHERE siteID = ?", [start_date,siteID], function (err, results, fields) {
+            //updating startDate
+            connection.query("UPDATE sites SET startDate = ? WHERE siteID = ?", [startDate,siteID], function (err, results, fields) {
                 if (err) {
                   // if there is an error with the query, log the error
                   logger.error("Problem getting from test table: \n", err);
