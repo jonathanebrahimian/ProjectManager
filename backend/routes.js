@@ -646,7 +646,7 @@ module.exports = function routes(app, logger) {
       });
     
       //Post /site
-      app.post('/site', (req, res) => {
+      app.post('/sites', (req, res) => {
             //console.log(req.body.product);
             // obtain a connection from our pool of connections
             pool.getConnection(function (err, connection){

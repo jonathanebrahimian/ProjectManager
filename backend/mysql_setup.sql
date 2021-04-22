@@ -18,9 +18,10 @@ create table users (
     userID int
 	AUTO_INCREMENT primary key
     , userType int
-    , first_name varchar(50)
-    , last_name varchar (50)
+    , firstName varchar(50)
+    , lastName varchar (50)
     , username varchar (50)
+    , email VARCHAR(100)
     , password varchar (50)
     , siteID int DEFAULT NULL
     , foreign key (siteID) references sites (siteID)
@@ -45,15 +46,20 @@ CREATE TABLE goals(
     goalName varchar(20),
     goalNotes varchar(100),
     materials varchar(30),
-    end_date DATE,
-    sitID INT NOT NULL,
-    FOREIGN KEY (sitID) REFERENCES sites(siteID)  ON DELETE CASCADE
+    endDate DATE,
+    userID INT,
+    FOREIGN KEY (userID) REFERENCES userID(userID)  ON DELETE CASCADE,
+    maeterialID INT,
+    FOREIGN KEY (maeterialID) REFERENCES materials(maeterialID)  ON DELETE CASCADE,
+    siteID INT NOT NULL,
+    FOREIGN KEY (siteID) REFERENCES sites(siteID)  ON DELETE CASCADE
 );
 
 CREATE TABLE sites(
    siteID INT AUTO_INCREMENT PRIMARY KEY,
    description varchar(250),
-   start_date DATE,
-   end_date DATE,
+   title VARCHAR(50),
+   startDate DATE,
+   endDate DATE,
    location varchar(100)
 );
