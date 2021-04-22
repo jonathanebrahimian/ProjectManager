@@ -727,7 +727,7 @@ module.exports = function routes(app, logger) {
         let location = req.body.location;
         let title = req.body.title;
         let startDate = req.body.startDate;
-        let startDate = req.body.endDate;
+        let endDate = req.body.endDate;
         let description = req.body.description;
         let siteID = req.body.siteID;
 
@@ -813,9 +813,6 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-<<<<<<< HEAD
-  
-=======
 
 
   // Put /checkout/{siteID}
@@ -866,5 +863,4 @@ module.exports = function routes(app, logger) {
   });
 });
            
->>>>>>> e6dbe3fa0a676fd304d2a1cd02e76a4003fc84f8
 }
