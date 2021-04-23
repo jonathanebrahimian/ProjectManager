@@ -873,7 +873,7 @@ module.exports = function routes(app, logger) {
   });
 });
 
-      // GET /builders
+  // GET /builders
   app.get('/builders', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
@@ -886,7 +886,7 @@ module.exports = function routes(app, logger) {
       else {
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM users WHERE userType = 1", function (err, result, fields) {
+        connection.query("SELECT firstName, lastName, username, email, siteID FROM users WHERE userType = 1", function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -1047,10 +1047,11 @@ module.exports = function routes(app, logger) {
       let username = req.body.username;
       let password = req.body.password;
       let siteID = req.body.siteID;
+      let email = req.body.email;
       
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID) VALUES (?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID], function (err, rows, fields) {
+        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
