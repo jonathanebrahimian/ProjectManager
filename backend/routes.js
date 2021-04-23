@@ -341,7 +341,7 @@ module.exports = function routes(app, logger) {
                 "error": "Error obtaining values"
               });
             } else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
@@ -386,7 +386,7 @@ module.exports = function routes(app, logger) {
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.end(JSON.stringify(result));
+            res.status(200).send(result);
             //res.status(200).send(`added ${req.body.product} to the table!`);
           }
         });
@@ -417,7 +417,7 @@ module.exports = function routes(app, logger) {
             logger.error("Problem getting from test table: \n", err);
             res.status(400).send('Problem getting from table'); 
           } else {
-            res.end(JSON.stringify(result));
+            res.status(200).send(result);
           }
         });
       }
@@ -445,7 +445,7 @@ module.exports = function routes(app, logger) {
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
@@ -473,7 +473,7 @@ module.exports = function routes(app, logger) {
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
@@ -510,7 +510,7 @@ module.exports = function routes(app, logger) {
             res.status(400).send('Problem inserting into table'); 
           } else {
             //res.end(JSON.stringify(result));
-            res.status(200).send(`added to the table!`);
+            res.status(200).send(result);
           }
         });
       }
@@ -528,6 +528,8 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         var siteID = req.param('siteID');
+        var userID = req.param('userID');
+
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
@@ -538,7 +540,7 @@ module.exports = function routes(app, logger) {
             logger.error("Problem getting from test table: \n", err);
             res.status(400).send('Problem getting from table'); 
           } else {
-            res.end(JSON.stringify(result));
+            res.status(200).send(result);
           }
         });
       }
@@ -576,7 +578,7 @@ module.exports = function routes(app, logger) {
                 console.log("SUCCESSFUL INSERT");
 
                 //res.end(JSON.stringify(result));
-                res.status(200).send(JSON.stringify(result));
+                res.status(200).send(result);
               }
             });
         }
@@ -605,7 +607,7 @@ module.exports = function routes(app, logger) {
             logger.error("Problem getting from test table: \n", err);
             res.status(400).send('Problem getting from table'); 
           } else {
-            res.status(200).send(JSON.stringify(result));
+            res.status(200).send(result);
           }
         });
       }
@@ -641,7 +643,7 @@ module.exports = function routes(app, logger) {
             }
               
               );
-            res.status(200).send(JSON.stringify(finalResult));
+            res.status(200).send(finalResult);
           }
         });
       }
@@ -854,7 +856,7 @@ module.exports = function routes(app, logger) {
           }
 
           connection.release();
-          res.end(JSON.stringify("Updated Successfully!"));
+          res.status(200).send(JSON.stringify("Updated Successfully!"));
 
 
           
@@ -903,7 +905,7 @@ module.exports = function routes(app, logger) {
       
 
         connection.release();
-        res.end(JSON.stringify("Updated Successfully!"));
+        res.status(200).send(JSON.stringify("Updated Successfully!"));
         
     }
   });
@@ -930,7 +932,7 @@ module.exports = function routes(app, logger) {
             res.status(400).send('Problem getting from table'); 
           } 
           else {
-            res.end(JSON.stringify(result));
+            res.status(200).send(result);
           }
         });
       }
@@ -965,7 +967,7 @@ module.exports = function routes(app, logger) {
               res.status(400).send('Problem getting from table'); 
             } 
             else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
@@ -999,7 +1001,7 @@ module.exports = function routes(app, logger) {
               res.status(400).send('Problem getting from table'); 
             } 
             else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
@@ -1027,7 +1029,7 @@ module.exports = function routes(app, logger) {
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
-              res.end(JSON.stringify(result));
+              res.status(200).send(result);
             }
           });
         }
