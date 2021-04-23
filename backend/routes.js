@@ -371,20 +371,15 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let id = req.body.id;
-      let name = req.body.name;
+      let siteID = req.param('siteID');
       let statusIn = req.body.status;
-      let inventory = req.body.inventory;
-      let quality = req.body.quality;
-      let supplier = req.body.supplier;
-      let siteID = req.body.siteID;
-      let userID = req.body.userID;
+      let quantity = req.body.quantity;
+      let supplierID = req.body.supplierID;
       
-      console.log(userID);
       
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier,userID, siteID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier,userID, siteID], function (err, result, fields) {
+        connection.query("INSERT INTO materials (status, quantity, supplierID, siteID) VALUES (?, ?, ?, ?)", [statusIn, quantity, supplierID, siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -410,10 +405,12 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         var siteID = req.param('siteID');
+        let supplierID = req.param('supplierID');
+
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM materials WHERE siteID = ?", [siteID], function (err, result, fields) {
+        connection.query("SELECT * FROM materials WHERE siteID = ? OR supplierID = ?", [siteID, supplierID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
