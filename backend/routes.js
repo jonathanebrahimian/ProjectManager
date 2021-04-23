@@ -1141,6 +1141,8 @@ module.exports = function routes(app, logger) {
       } else {
         let userType = req.body.userType;
         let userDescription = req.body.userDescription;
+        let companyName = req.body.companyName;
+        let materialSupplied = req.body.materialSupplied;
         let firstName = req.body.firstName;
         let lastName = req.body.lastName;
         let username = req.body.username;
