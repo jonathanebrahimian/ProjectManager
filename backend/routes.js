@@ -197,12 +197,12 @@ module.exports = function routes(app, logger) {
 		  var goalID = req.param('goalID');
 		  let goalName = req.body.goalName;
 		  let goalNotes = req.body.goalNotes;
-		  let materials = req.body.materials;
+		  let materialID = req.body.materialID;
 		  let userID = req.body.userID;
       let endDate = req.body.endDate;
 
         // if there is no issue obtaining a connection, execute query and release connection
-		if (goalName != "") {
+		if (goalName !== undefined) {
         connection.query("UPDATE goals SET goals.goalName = ? WHERE goalID = (?)", [goalName, goalID], function (err, rows, fields) {
           
 		  if (err) {
@@ -212,7 +212,7 @@ module.exports = function routes(app, logger) {
           }
         });
 		}
-		 if (goalNotes != "") {
+		 if (goalNotes !== undefined) {
 			connection.query("UPDATE goals SET goals.goalNotes = ? WHERE goalID = (?)", [goalNotes, goalID], function (err, rows, fields) {
          
 		  if (err) {
@@ -222,8 +222,8 @@ module.exports = function routes(app, logger) {
           }
         });
 		}
-		if (materials != 0) {
-			connection.query("UPDATE goals SET goals.materials = ? WHERE goalID = (?)", [materials, goalID], function (err, rows, fields) {
+		if (materialID !== undefined) {
+			connection.query("UPDATE goals SET goals.materialID = ? WHERE goalID = (?)", [materialID, goalID], function (err, rows, fields) {
        
 		  if (err) {
             // if there is an error with the query, log the error
@@ -232,7 +232,7 @@ module.exports = function routes(app, logger) {
           }
         });
 		}
-    if (endDate != "") {
+    if (endDate !== undefined) {
 			connection.query("UPDATE goals SET goals.endDate = ? WHERE goalID = (?)", [endDate, goalID], function (err, rows, fields) {
        
 		  if (err) {
@@ -242,19 +242,19 @@ module.exports = function routes(app, logger) {
           }
         });
 		}
-		if (userID != "") {
-			connection.query("UPDATE goals SET goals.userID = ? WHERE goalID = (?)", [userID, goalID], function (err, rows, fields) {
-         
-		  if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem updating the goals table: \n", err);
-            res.status(400).send('Problem updating the table'); 
-          }
-		  else {res.status(200).send(`Updated the specified elements in the table!`);}
+      if (userID !== undefined) {
+        connection.query("UPDATE goals SET goals.userID = ? WHERE goalID = (?)", [userID, goalID], function (err, rows, fields) {
+          
+          if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem updating the goals table: \n", err);
+                res.status(400).send('Problem updating the table'); 
+              }
         });
-		}
-		connection.release();
       }
+      connection.release();
+      res.status(200).send(`Updated the specified elements in the table!`);
+    }
     });
   });
   
@@ -295,7 +295,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT userID, first_name, last_name FROM users WHERE users.userType = 2", function (err, rows, fields) {
+        connection.query("SELECT userID, firstName, lastName FROM users WHERE users.userType = 2", function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
