@@ -1049,14 +1049,31 @@ module.exports = function routes(app, logger) {
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
           connection.query("SELECT username, firstName, lastName,userType, email, userID, siteID FROM users WHERE username = ? AND password = ?", [username, password], function (err, result, fields) {
-            connection.release();
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
               if(result.length === 0){
-                res.end(JSON.stringify("Unauthorized user."));
+                connection.query("SELECT username, firstName, lastName, email, supplierID, companyName,materialSupplied FROM suppliers WHERE username = ? AND password = ?", [username, password], function (err, result, fields) {
+                  
+                  if (err) {
+                    // if there is an error with the query, log the error
+                    logger.error("Problem getting from test table: \n", err);
+                    res.status(400).send('Problem getting from table'); 
+                  } else{
+                    console.log(result.length);
+                    if(result.length === 0){
+                      res.status(404).send('Invalid credentials'); 
+                    }else{
+                      res.status(200).json({
+                        result,
+                        "userDescription":"supplier"
+                      });
+                    }
+
+                  }
+                });
               }else{
                 result = result[0];
                 let description = "";
@@ -1066,6 +1083,7 @@ module.exports = function routes(app, logger) {
                 }else if(result['userType'] === 1){
                   description = "builder";
                 }
+
                 res.status(200).json({
                   result,
                   "userDescription":description
@@ -1073,6 +1091,7 @@ module.exports = function routes(app, logger) {
               }
             }
           });
+          connection.release();
         }
       });
     });
