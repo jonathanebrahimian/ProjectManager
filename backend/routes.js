@@ -326,24 +326,22 @@ module.exports = function routes(app, logger) {
           let companyName = req.body.companyName;
           let materialSupplied = req.body.materialSupplied;
 
-          let firsName = req.body.firstName;
+          let firstName = req.body.firstName;
           let lastName = req.body.lastName;
           let username = req.body.username;
           let password = req.body.password;
           let siteID = req.body.siteID;
           let email = req.body.email;
-          connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied,companyName) VALUES (?, ?, ?, ?, ?, ?, ?) ", [firstName, lastName, username, password, siteID, email,materialSupplied,companyName], function (err, rows, fields) {
+          console.log(email);
+          connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied,companyName) VALUES (?, ?, ?, ?, ?, ?, ?) ", [firstName, lastName, username, password, email,materialSupplied,companyName], function (err, rows, fields) {
             connection.release();
             if (err) {
               logger.error("Error while fetching values: \n", err);
               res.status(400).json({
-                "data": [],
                 "error": "Error obtaining values"
-              })
-            } else {
-              res.status(200).json({
-                "data": rows
               });
+            } else {
+              res.end(JSON.stringify(result));
             }
           });
         }
@@ -949,15 +947,16 @@ module.exports = function routes(app, logger) {
           res.status(400).send('Problem obtaining MySQL connection'); 
         } 
         else {
-        let userID = req.body.userID;
-        let firstName = req.body.firstName;
-        let lastName = req.body.lastName;
-        let email = req.body.email;
-        let username = req.body.username;
+        let userID = req.param('userID');
+        let firstName = req.param('firstName');
+
+        let lastName = req.param('lastName');
+        let email = req.param('email');
+        let username = req.param('username');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ?", [firstName, lastName, email, username], function (err, result, fields) {
+          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ? OR userID = ?", [firstName, lastName, email, username, userID], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -1119,14 +1118,14 @@ module.exports = function routes(app, logger) {
       
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, rows, fields) {
+        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.status(200).send(result);
           }
         });
       }
