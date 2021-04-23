@@ -1,19 +1,13 @@
 import React, {Component, useState} from 'react';
 import { Link } from 'react-router-dom';
 
-
-function addGoals(){
-
-}
 export class Goals extends React.Component {
     state ={
         title: "",
         description: "",
         deadline: "",
-        assignedWorkers: ""
+        assignedWorker: ""
     }
-
-
 
     handleChange = event =>{
         this.setState({
@@ -28,6 +22,12 @@ export class Goals extends React.Component {
             deadline: this.state.deadline,
             assignedWorkers: this.state.assignedWorkers,
             complete: false
+        })
+        this.setState({
+            title: "",
+            description: "",
+            deadline: "",
+            assignedWorker: ""
         })
     }
     render(){
@@ -44,6 +44,12 @@ export class Goals extends React.Component {
             value ={this.state.description}
             onChange = {this.handleChange}
             placeholder = "Goal Description"
+            />
+            <input
+            name = "deadline"
+            value = {this.state.deadline}
+            onChange = {this.handleChange}
+            placeholder = "Deadline (YYYY-MM-DD)"
             />
             <input type = "submit" value="Add Goal" />
         </form>

@@ -17,7 +17,9 @@ export class GoalsList extends React.Component{
         return(
             <div>
                 <Goals onSubmit={this.addGoals} />
-                {JSON.stringify(this.state.goals)}
+                {this.state.goals.map(goal =>(
+                    <div>{goal.title}{goal.description}{goal.deadline}</div>
+                ))}
             </div>
         )
     }
