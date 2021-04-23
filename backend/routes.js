@@ -697,7 +697,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
