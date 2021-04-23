@@ -295,7 +295,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT userID, firstName, lastName FROM users WHERE users.userType = 2", function (err, rows, fields) {
+        connection.query("SELECT supplierID, firstName, lastName, username, email,materialSupplied,companyName FROM suppliers", function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
@@ -312,6 +312,43 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  // GET all users who supply materials
+  app.post('/suppliers', (req, res) => {
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          let companyName = req.body.companyName;
+          let materialSupplied = req.body.materialSupplied;
+
+          let firsName = req.body.firstName;
+          let lastName = req.body.lastName;
+          let username = req.body.username;
+          let password = req.body.password;
+          let siteID = req.body.siteID;
+          let email = req.body.email;
+          connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied,companyName) VALUES (?, ?, ?, ?, ?, ?, ?) ", [firstName, lastName, username, password, siteID, email,materialSupplied,companyName], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              logger.error("Error while fetching values: \n", err);
+              res.status(400).json({
+                "data": [],
+                "error": "Error obtaining values"
+              })
+            } else {
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+      });
+    });
   
   // TO BE EDITED BY LAUREN
     /* BODY FORMAT FOR POST: 
@@ -1073,7 +1110,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
       let userType = req.body.userType;
-      let firsName = req.body.firstName;
+      let firstName = req.body.firstName;
       let lastName = req.body.lastName;
       let username = req.body.username;
       let password = req.body.password;
