@@ -1015,7 +1015,7 @@ module.exports = function routes(app, logger) {
           res.status(400).send('Problem obtaining MySQL connection'); 
         } 
         else {
-        let userID = req.body.userID;
+        let userID = req.param('userID');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
@@ -1058,7 +1058,11 @@ module.exports = function routes(app, logger) {
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
             } else {
-              res.end(JSON.stringify(result));
+              if(result.length === 0){
+                res.end(JSON.stringify("Unauthorized user."));
+              }else{
+                res.end(JSON.stringify(result));
+              }
             }
           });
         }
