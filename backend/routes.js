@@ -121,13 +121,13 @@ module.exports = function routes(app, logger) {
       } else {
 		  let goalName = req.body.goalName;
 		  let goalNotes = req.body.goalNotes;
-		  let materials = req.body.materials;
+		  let materialID = req.body.materialID;
 		  let siteID = req.body.siteID;
 		  let userID = req.body.userID;
       let endDate = req.body.endDate;
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO goals (goalName, goalNotes, materials, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materials, siteID, userID, endDate], function (err, rows, fields) {
+        connection.query("INSERT INTO goals (goalName, goalNotes, materialID, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materialID, siteID, userID, endDate], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -646,32 +646,32 @@ module.exports = function routes(app, logger) {
       });
     
       // GET /equipment/{siteID}
-      app.get('/equipment', (req, res) => {
-        //console.log(req.body.product);
-        // obtain a connection from our pool of connections
-        pool.getConnection(function (err, connection){
-          if(err){
-            // if there is an issue obtaining a connection, release the connection instance and log the error
-            logger.error('Problem obtaining MySQL connection',err)
-            res.status(400).send('Problem obtaining MySQL connection'); 
-          } else {
-            var siteID = req.param('siteID');
+      // app.get('/equipment', (req, res) => {
+      //   //console.log(req.body.product);
+      //   // obtain a connection from our pool of connections
+      //   pool.getConnection(function (err, connection){
+      //     if(err){
+      //       // if there is an issue obtaining a connection, release the connection instance and log the error
+      //       logger.error('Problem obtaining MySQL connection',err)
+      //       res.status(400).send('Problem obtaining MySQL connection'); 
+      //     } else {
+      //       var siteID = req.param('siteID');
     
-          //console.log(req.param);
-            // if there is no issue obtaining a connection, execute query and release connection
-            connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, rows, fields) {
-              connection.release();
-              if (err) {
-                // if there is an error with the query, log the error
-                logger.error("Problem getting from test table: \n", err);
-                res.status(400).send('Problem getting from table'); 
-              } else {
-                res.end(JSON.stringify(result));
-              }
-            });
-          }
-        });
-      });
+      //     //console.log(req.param);
+      //       // if there is no issue obtaining a connection, execute query and release connection
+      //       connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, rows, fields) {
+      //         connection.release();
+      //         if (err) {
+      //           // if there is an error with the query, log the error
+      //           logger.error("Problem getting from test table: \n", err);
+      //           res.status(400).send('Problem getting from table'); 
+      //         } else {
+      //           res.end(JSON.stringify(result));
+      //         }
+      //       });
+      //     }
+      //   });
+      // });
     
       //Post /site
       app.post('/sites', (req, res) => {
@@ -697,7 +697,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
