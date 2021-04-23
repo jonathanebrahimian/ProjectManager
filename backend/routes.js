@@ -987,26 +987,90 @@ module.exports = function routes(app, logger) {
         } 
         else {
         let userID = req.param('userID');
+        let userDescription = req.body.userDescription;
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var password = req.body.password;
         var username = req.body.username;
         var email = req.body.email;
-  
-        //console.log(req.param);
-          // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ? WHERE userID = ?", [firstName, lastName, username, password, email, userID], function (err, result, fields) {
+        var siteID = req.body.siteID;
+
+        connection.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            if(result.length > 0){
+                connection.release();
+                res.status(400).send("User email or password is already being used");
+            }
+          }
+        });
+
+          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, siteID = ? where userID = ?", [firstName, lastName, username, password, email, siteID, userID], function (err, result, fields) {
+            
             if (err) {
               // if there is an error with the query, log the error
-              logger.error("Problem getting from test table: \n", err);
-              res.status(400).send('Problem getting from table'); 
-            } 
-            else {
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              connection.release();
               res.status(200).send(result);
             }
           });
         }
-      });
+      };
+    });
+
+
+    // PUT /suppliers
+    app.put('/suppliers', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let supplierID = req.param('supplierID');
+        let userDescription = req.body.userDescription;
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
+        var password = req.body.password;
+        var username = req.body.username;
+        var email = req.body.email;
+        var materialSupplied = req.body.materialSupplied;
+        var companyName = req.body.companyName;
+
+        connection.query("SELECT * FROM suppliers WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            if(result.length > 0){
+                connection.release();
+                res.status(400).send("User email or password is already being used");
+            }
+          }
+        });
+
+          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, materialSupplied = ?, companyName = ? where supplierID = ?", [firstName, lastName, username, password, email, materialSupplied, companyName, supplierID], function (err, result, fields) {
+            
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              connection.release();
+              res.status(200).send(result);
+            }
+          });
+        }
+      };
     });
 
     // DELETE
@@ -1024,6 +1088,35 @@ module.exports = function routes(app, logger) {
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
           connection.query("DELETE FROM users WHERE userID = ?", userID, function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.status(200).send(result);
+            }
+          });
+        }
+      });
+
+    });
+
+    // DELETE
+    // /api/deleteit
+    app.delete('/suppliers', async (req, res) => {  
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let supplierID = req.param('supplierID');
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("DELETE FROM suppliers WHERE supplierID = ?", supplierID, function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
