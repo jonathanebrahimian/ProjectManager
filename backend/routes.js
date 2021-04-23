@@ -99,11 +99,12 @@ module.exports = function routes(app, logger) {
  
   /* BODY FORMAT FOR POST:
   {
-	  "goalName" : "",
-	  "goalNotes" : "",
-	  "materials" : "",
-	  "siteID" : 0,
-	  "userID" : 0 
+	  "goalName" : "Pool construction",
+	  "goalNotes" : "Lay concrete",
+	  "materials" : 1,
+	  "siteID" : 1,
+	  "userID" : 1,
+    "endDate" : "2021-04-27"
   }
   
   */
@@ -123,9 +124,10 @@ module.exports = function routes(app, logger) {
 		  let materials = req.body.materials;
 		  let siteID = req.body.siteID;
 		  let userID = req.body.userID;
+      let endDate = req.body.endDate;
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO goals (goalName, goalNotes, materials, siteID, userID) VALUES (?, ?, ?, ?, ?)", [goalName, goalNotes, materials, siteID, userID], function (err, rows, fields) {
+        connection.query("INSERT INTO goals (goalName, goalNotes, materials, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materials, siteID, userID, endDate], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -167,19 +169,21 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-  
+
+ //Update a goal
+ // PARAM:
+ // int goalID
+
   /* BODY FORMAT FOR PUT:
   {
-	  "goalName" : "",
-	  "goalNotes" : "",
-	  "materials" : "",
-	  "userID" : 0 
+	  "goalName" : "Pool flooring",
+	  "goalNotes" : "More concrete",
+	  "materials" : 1,
+	  "userID" : 1, 
+    "endDate" : "2021-04-30"
   }
-  
-  PARAM:
-  goalID
-  
   */
+
    // Update a goal for a specific site
   app.put('/goals', (req, res) => {
     //console.log(req.body.product);
@@ -195,6 +199,7 @@ module.exports = function routes(app, logger) {
 		  let goalNotes = req.body.goalNotes;
 		  let materials = req.body.materials;
 		  let userID = req.body.userID;
+      let endDate = req.body.endDate;
 
         // if there is no issue obtaining a connection, execute query and release connection
 		if (goalName != "") {
@@ -217,8 +222,18 @@ module.exports = function routes(app, logger) {
           }
         });
 		}
-		if (materials != "") {
+		if (materials != 0) {
 			connection.query("UPDATE goals SET goals.materials = ? WHERE goalID = (?)", [materials, goalID], function (err, rows, fields) {
+       
+		  if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+		}
+    if (endDate != "") {
+			connection.query("UPDATE goals SET goals.endDate = ? WHERE goalID = (?)", [endDate, goalID], function (err, rows, fields) {
        
 		  if (err) {
             // if there is an error with the query, log the error
@@ -280,7 +295,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT userID, firstName, lastName FROM users WHERE users.userType = 2", function (err, rows, fields) {
+        connection.query("SELECT userID, first_name, last_name FROM users WHERE users.userType = 2", function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
@@ -669,7 +684,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
