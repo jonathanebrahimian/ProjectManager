@@ -1139,26 +1139,68 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let userType = req.body.userType;
-      let firstName = req.body.firstName;
-      let lastName = req.body.lastName;
-      let username = req.body.username;
-      let password = req.body.password;
-      let siteID = req.body.siteID;
-      let email = req.body.email;
-      
-      //console.log(req.param);
-        // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
-          connection.release();
+        let userType = req.body.userType;
+        let userDescription = req.body.userDescription;
+        let firstName = req.body.firstName;
+        let lastName = req.body.lastName;
+        let username = req.body.username;
+        let password = req.body.password;
+        let siteID = req.body.siteID;
+        let email = req.body.email;
+
+        connection.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(result);
+            if(result.length > 0){
+                connection.release();
+                res.status(400).send("User email or password is already being used");
+            }
           }
         });
+
+        connection.query("SELECT * FROM suppliers WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            if(result.length > 0){
+                connection.release();
+                res.status(400).send("User email or password is already being used");
+            }
+          }
+        });
+
+        if(userDescription === "builder" || userDescription === "site manager"){
+          connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
+            
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              connection.release();
+              res.status(200).send(result);
+            }
+          });
+        }else if(userDescription === "supplier"){
+          connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied, companyName) VALUES (?, ?, ?, ?, ?, ?, ?)", [firstName, lastName, username, password, email,materialSupplied,companyName], function (err, result, fields) {
+            
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              connection.release();
+              res.status(200).send(result);
+            }
+          });
+
+        }
+
       }
     });
   });
