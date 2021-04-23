@@ -1020,7 +1020,7 @@ module.exports = function routes(app, logger) {
             }
           });
         }
-      };
+      });
     });
 
 
@@ -1070,7 +1070,7 @@ module.exports = function routes(app, logger) {
             }
           });
         }
-      };
+      });
     });
 
     // DELETE
