@@ -712,7 +712,7 @@ module.exports = function routes(app, logger) {
         let location = req.body.location;
         let title = req.body.title;
         let startDate = req.body.startDate;
-        let startDate = req.body.endDate;
+        let endDate = req.body.endDate;
         let description = req.body.description;
         let siteID = req.body.siteID;
 
