@@ -313,6 +313,19 @@ module.exports = function routes(app, logger) {
     });
   });
   
+  // TO BE EDITED BY LAUREN
+    /* BODY FORMAT FOR POST: 
+  {
+	  "goalName" : "Pool construction",
+	  "goalNotes" : "Lay concrete",
+	  "materials" : 1,
+	  "siteID" : 1,
+	  "userID" : 1,
+    "endDate" : "2021-04-27"
+  }
+  
+  */
+
   // POST /materials
   app.post('/materials', (req, res) => {
     //console.log(req.body.product);
@@ -352,7 +365,7 @@ module.exports = function routes(app, logger) {
   });
 
   // GET /materials/{siteID}
-  app.get('/materials/:siteID', (req, res) => {
+  app.get('/materials', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -361,7 +374,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
@@ -380,7 +393,7 @@ module.exports = function routes(app, logger) {
   });
 
     // GET /materialrequests/{supplierID}     // requested materials for specific supplier
-    app.get('/materials/:supplier', (req, res) => {
+    app.get('/materials', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -389,7 +402,7 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
-        let supplier = req.params.supplier;
+          var supplier = req.param('supplier');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
@@ -408,7 +421,7 @@ module.exports = function routes(app, logger) {
     });
 
     // GET /materials/{siteID}    materials accepted but not delivered
-    app.get('/materials/:siteID', (req, res) => {
+    app.get('/materials', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -417,7 +430,7 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
-        let siteID = req.params.siteID;
+          var siteID = req.param('siteID');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
@@ -469,7 +482,7 @@ module.exports = function routes(app, logger) {
   });
 
   // GET /equipment/{siteID}
-  app.get('/equipment/:siteID', (req, res) => {
+  app.get('/equipment', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -478,7 +491,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
@@ -535,7 +548,7 @@ module.exports = function routes(app, logger) {
   });
 
   //get annoucements
-  app.get('/announcement/:siteID', (req, res) => {
+  app.get('/announcement', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -545,7 +558,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
@@ -565,7 +578,7 @@ module.exports = function routes(app, logger) {
 
 
   //get roster
-  app.get('/roster/:siteID', (req, res) => {
+  app.get('/roster', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -575,7 +588,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
@@ -633,7 +646,7 @@ module.exports = function routes(app, logger) {
       });
     
       // GET /equipment/{siteID}
-      app.get('/equipment/:siteID', (req, res) => {
+      app.get('/equipment', (req, res) => {
         //console.log(req.body.product);
         // obtain a connection from our pool of connections
         pool.getConnection(function (err, connection){
@@ -642,7 +655,7 @@ module.exports = function routes(app, logger) {
             logger.error('Problem obtaining MySQL connection',err)
             res.status(400).send('Problem obtaining MySQL connection'); 
           } else {
-          let siteID = req.params.siteID;
+            var siteID = req.param('siteID');
     
           //console.log(req.param);
             // if there is no issue obtaining a connection, execute query and release connection
