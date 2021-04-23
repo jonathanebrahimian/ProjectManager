@@ -96,6 +96,236 @@ module.exports = function routes(app, logger) {
     });
   });
   
+ 
+  /* BODY FORMAT FOR POST:
+  {
+    "goalName" : "Pool construction",
+    "goalNotes" : "Lay concrete",
+    "materials" : 1,
+    "siteID" : 1,
+    "userID" : 1,
+    "endDate" : "2021-04-27"
+  }
+  
+  */
+ 
+  // POST a goal for a site
+  app.post('/goals', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      let goalName = req.body.goalName;
+      let goalNotes = req.body.goalNotes;
+      let materialID = req.body.materialID;
+      let siteID = req.body.siteID;
+      let userID = req.body.userID;
+      let endDate = req.body.endDate;
+      //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("INSERT INTO goals (goalName, goalNotes, materialID, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materialID, siteID, userID, endDate], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into goals table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            res.status(200).send(`added the goal to the table!`);
+          }
+        });
+      }
+    });
+  });
+  
+  // GET a specific goal for a site
+  app.get('/goals', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      var siteID = req.param('siteID');
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("SELECT * FROM goals WHERE goals.siteID = ?", siteID, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            logger.error("Error while fetching values: \n", err);
+            res.status(400).json({
+              "data": [],
+              "error": "Error obtaining values"
+            })
+          } else {
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+ //Update a goal
+ // PARAM:
+ // int goalID
+
+  /* BODY FORMAT FOR PUT:
+  {
+    "goalName" : "Pool flooring",
+    "goalNotes" : "More concrete",
+    "materials" : 1,
+    "userID" : 1, 
+    "endDate" : "2021-04-30"
+  }
+  */
+
+   // Update a goal for a specific site
+  app.put('/goals', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      var goalID = req.param('goalID');
+      let goalName = req.body.goalName;
+      let goalNotes = req.body.goalNotes;
+      let materialID = req.body.materialID;
+      let userID = req.body.userID;
+      let endDate = req.body.endDate;
+
+        // if there is no issue obtaining a connection, execute query and release connection
+    if (goalName !== undefined) {
+        connection.query("UPDATE goals SET goals.goalName = ? WHERE goalID = (?)", [goalName, goalID], function (err, rows, fields) {
+          
+      if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+    }
+     if (goalNotes !== undefined) {
+      connection.query("UPDATE goals SET goals.goalNotes = ? WHERE goalID = (?)", [goalNotes, goalID], function (err, rows, fields) {
+         
+      if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+    }
+    if (materialID !== undefined) {
+      connection.query("UPDATE goals SET goals.materialID = ? WHERE goalID = (?)", [materialID, goalID], function (err, rows, fields) {
+       
+      if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+    }
+    if (endDate !== undefined) {
+      connection.query("UPDATE goals SET goals.endDate = ? WHERE goalID = (?)", [endDate, goalID], function (err, rows, fields) {
+       
+      if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+    }
+      if (userID !== undefined) {
+        connection.query("UPDATE goals SET goals.userID = ? WHERE goalID = (?)", [userID, goalID], function (err, rows, fields) {
+          
+          if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem updating the goals table: \n", err);
+                res.status(400).send('Problem updating the table'); 
+              }
+        });
+      }
+      connection.release();
+      res.status(200).send(`Updated the specified elements in the table!`);
+    }
+    });
+  });
+  
+   // Delete a goal for a site
+  app.delete('/goals', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      var goalID = req.param('goalID');
+      //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("DELETE FROM goals WHERE goals.goalID = (?)", goalID, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem deleting from the goals table: \n", err);
+            res.status(400).send('Problem deleting from the table'); 
+          } else {
+            res.status(200).send(`Deleted ${req.body.goalID} from the table!`);
+          }
+        });
+      }
+    });
+  });
+  
+  // GET all users who supply materials
+  app.get('/suppliers', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("SELECT userID, firstName, lastName FROM users WHERE users.userType = 2", function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            logger.error("Error while fetching values: \n", err);
+            res.status(400).json({
+              "data": [],
+              "error": "Error obtaining values"
+            })
+          } else {
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+  
+  // TO BE EDITED BY LAUREN
+    /* BODY FORMAT FOR POST: 
+  {
+    "goalName" : "Pool construction",
+    "goalNotes" : "Lay concrete",
+    "materials" : 1,
+    "siteID" : 1,
+    "userID" : 1,
+    "endDate" : "2021-04-27"
+  }
+  
+  */
+
   // POST /materials
   app.post('/materials', (req, res) => {
     //console.log(req.body.product);
@@ -106,18 +336,18 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-		  let id = req.body.id;
-		  let name = req.body.name;
-		  let statusIn = req.body.status;
-		  let inventory = req.body.inventory;
-		  let quality = req.body.quality;
-		  let supplier = req.body.supplier;
+      let id = req.body.id;
+      let name = req.body.name;
+      let statusIn = req.body.status;
+      let inventory = req.body.inventory;
+      let quality = req.body.quality;
+      let supplier = req.body.supplier;
       let siteID = req.body.siteID;
       let userID = req.body.userID;
       
       console.log(userID);
       
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("INSERT INTO materials (id, name, status, inventory, quality, supplier,userID, siteID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id, name, statusIn, inventory, quality, supplier,userID, siteID], function (err, result, fields) {
           connection.release();
@@ -135,7 +365,7 @@ module.exports = function routes(app, logger) {
   });
 
   // GET /materials/{siteID}
-  app.get('/materials/:siteID', (req, res) => {
+  app.get('/materials', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -144,9 +374,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("SELECT * FROM materials WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
@@ -163,7 +393,7 @@ module.exports = function routes(app, logger) {
   });
 
     // GET /materialrequests/{supplierID}     // requested materials for specific supplier
-    app.get('/materials/:supplier', (req, res) => {
+    app.get('/materials', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -172,7 +402,7 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
-        let supplier = req.params.supplier;
+          var supplier = req.param('supplier');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
@@ -191,7 +421,7 @@ module.exports = function routes(app, logger) {
     });
 
     // GET /materials/{siteID}    materials accepted but not delivered
-    app.get('/materials/:siteID', (req, res) => {
+    app.get('/materials', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -200,7 +430,7 @@ module.exports = function routes(app, logger) {
           logger.error('Problem obtaining MySQL connection',err)
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
-        let siteID = req.params.siteID;
+          var siteID = req.param('siteID');
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
@@ -228,13 +458,13 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-		  let equipmentID = req.body.equipmentID;
-		  let equipmentName = req.body.equipmentName;
-		  let location = req.body.location;
+      let equipmentID = req.body.equipmentID;
+      let equipmentName = req.body.equipmentName;
+      let location = req.body.location;
       let siteID = req.body.siteID;
-		  let userID = req.body.userID;
+      let userID = req.body.userID;
       
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID) VALUES (?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID], function (err, result, fields) {
           connection.release();
@@ -252,7 +482,7 @@ module.exports = function routes(app, logger) {
   });
 
   // GET /equipment/{siteID}
-  app.get('/equipment/:siteID', (req, res) => {
+  app.get('/equipment', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -261,9 +491,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
@@ -318,7 +548,7 @@ module.exports = function routes(app, logger) {
   });
 
   //get annoucements
-  app.get('/announcement/:siteID', (req, res) => {
+  app.get('/announcement', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -328,9 +558,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("SELECT * FROM announcements WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
@@ -348,7 +578,7 @@ module.exports = function routes(app, logger) {
 
 
   //get roster
-  app.get('/roster/:siteID', (req, res) => {
+  app.get('/roster', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -358,9 +588,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      let siteID = req.params.siteID;
+        var siteID = req.param('siteID');
 
-		  //console.log(req.param);
+      //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query("SELECT * FROM users WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
@@ -416,7 +646,7 @@ module.exports = function routes(app, logger) {
       });
     
       // GET /equipment/{siteID}
-      app.get('/equipment/:siteID', (req, res) => {
+      app.get('/equipment', (req, res) => {
         //console.log(req.body.product);
         // obtain a connection from our pool of connections
         pool.getConnection(function (err, connection){
@@ -425,7 +655,7 @@ module.exports = function routes(app, logger) {
             logger.error('Problem obtaining MySQL connection',err)
             res.status(400).send('Problem obtaining MySQL connection'); 
           } else {
-          let siteID = req.params.siteID;
+            var siteID = req.param('siteID');
     
           //console.log(req.param);
             // if there is no issue obtaining a connection, execute query and release connection
@@ -444,7 +674,7 @@ module.exports = function routes(app, logger) {
       });
     
       //Post /site
-      app.post('/site', (req, res) => {
+      app.post('/sites', (req, res) => {
             //console.log(req.body.product);
             // obtain a connection from our pool of connections
             pool.getConnection(function (err, connection){
@@ -467,7 +697,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, start_date, end_date, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
@@ -496,8 +726,154 @@ module.exports = function routes(app, logger) {
         });
       });
 
+    // Put /equipment/{siteID}
+    app.put('/sites', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+      if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        console.log("Inside put");
+        let location = req.body.location;
+        let title = req.body.title;
+        let startDate = req.body.startDate;
+        let endDate = req.body.endDate;
+        let description = req.body.description;
+        let siteID = req.body.siteID;
 
-    // GET /builders
+        
+        if(title !== undefined){
+          //Title
+          connection.query("UPDATE sites SET title = ? WHERE siteID = ?", [title,siteID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+
+        if(location !== undefined){
+          //Location
+          connection.query("UPDATE sites SET location = ? WHERE siteID = ?", [location,siteID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated location");
+              }
+          });
+        }
+        
+
+        if(endDate !== undefined){
+            //End Date
+            connection.query("UPDATE sites SET endDate = ? WHERE siteID = ?", [endDate,siteID], function (err, results, fields) {
+              if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem getting from test table: \n", err);
+                res.status(400).send('Problem getting from table'); 
+                } else {
+                  console.log("Updating End Date");
+                }
+            });
+        }
+
+        
+          if(startDate !== undefined){
+
+            //updating startDate
+            connection.query("UPDATE sites SET startDate = ? WHERE siteID = ?", [startDate,siteID], function (err, results, fields) {
+                if (err) {
+                  // if there is an error with the query, log the error
+                  logger.error("Problem getting from test table: \n", err);
+                  res.status(400).send('Problem getting from table'); 
+                  } else {
+                    console.log("Updating Start Date");
+                  }
+              });
+          }
+          
+          
+          //updating description
+          if(description !== undefined){
+            connection.query("UPDATE sites SET description = ? WHERE siteID = ?", [description,siteID], function (err, results, fields) {
+                
+              if (err) {
+                  // if there is an error with the query, log the error
+                  logger.error("Problem getting from test table: \n", err);
+                  res.status(400).send('Problem getting from table'); 
+                  } else {
+                    console.log("Updated description!");    
+                  }
+              });
+
+          }
+
+          connection.release();
+          res.end(JSON.stringify("Updated Successfully!"));
+
+
+          
+          
+      }
+    });
+  });
+
+
+  // Put /checkout/{siteID}
+  app.put('/equipment', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+    if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+    } else {
+      console.log("Inside put");
+      let equipmentID = req.body.equipmentID;
+      let location = req.body.location;
+      
+      let userID = req.body.userID;
+      let now = undefined;
+
+      if(userID !== undefined){
+        now = new Date();
+      }
+
+      
+      
+        //Title
+      connection.query("UPDATE equipment SET location = ?,userID = ?,lastCheckout = ? WHERE equipmentID = ?", [location,userID,now,equipmentID], function (err, results, fields) {
+        if (err) {
+          // if there is an error with the query, log the error
+          logger.error("Problem getting from test table: \n", err);
+          res.status(400).send('Problem getting from table'); 
+          } else {
+            console.log("Updated title");
+          }
+      });
+      
+
+
+      
+
+        connection.release();
+        res.end(JSON.stringify("Updated Successfully!"));
+        
+    }
+  });
+});
+
+      // GET /builders
   app.get('/builders', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
@@ -525,7 +901,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // GET /users/{userID} 
+    // GET /users/{userID} 
     app.get('/users', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
@@ -581,7 +957,6 @@ module.exports = function routes(app, logger) {
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
           connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ? WHERE userID = ?", [firstName, lastName, username, password, email, userID], function (err, result, fields) {
-            connection.release();
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
@@ -624,7 +999,7 @@ module.exports = function routes(app, logger) {
 
     });
 
-    // GET /login
+     // GET /login
     app.post('/login', (req, res) => {
       //console.log(req.body.product);
       // obtain a connection from our pool of connections
@@ -655,7 +1030,8 @@ module.exports = function routes(app, logger) {
       });
     });
 
-  // POST /register
+
+    // POST /register
   app.post('/register', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
@@ -687,5 +1063,5 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-
+           
 }
