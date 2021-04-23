@@ -496,4 +496,196 @@ module.exports = function routes(app, logger) {
         });
       });
 
+
+    // GET /builders
+  app.get('/builders', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } 
+      else {
+      //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("SELECT * FROM users WHERE userType = 1", function (err, result, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem getting from test table: \n", err);
+            res.status(400).send('Problem getting from table'); 
+          } 
+          else {
+            res.end(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+  // GET /users/{userID} 
+    app.get('/users', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let userID = req.params.userID;
+        let firstName = req.params.firstName;
+        let lastName = req.params.lastName;
+        let username = req.params.username;
+        let email = req.params.email;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          if(first_name == NULL)
+          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ?", [firstName, lastName, email, username], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } 
+            else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+    // PUT /users/{userID} 
+    app.put('/users', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let userID = req.body.userID;
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
+        var password = req.body.password;
+        var username = req.body.username;
+        var email = req.body.email;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ? WHERE userID = ?", [firstName, lastName, username, password, email, userID], function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } 
+            else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+    // DELETE
+    // /api/deleteit
+    app.delete('/users', async (req, res) => {  
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let userID = req.body.userID;
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("DELETE FROM users WHERE userID = ?", userID, function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+
+    });
+
+    // GET /login
+    app.post('/login', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let username = req.body.username;
+        let password = req.body.password;
+        console.log(password);
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("SELECT username, firstName, lastName, email, userID, siteID FROM users WHERE username = ? AND password = ?", [username, password], function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.end(JSON.stringify(result));
+            }
+          });
+        }
+      });
+    });
+
+  // POST /register
+  app.post('/register', (req, res) => {
+    //console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+      let userType = req.body.userType;
+      let firsName = req.body.firstName;
+      let lastName = req.body.lastName;
+      let username = req.body.username;
+      let password = req.body.password;
+      let siteID = req.body.siteID;
+      
+      //console.log(req.param);
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID) VALUES (?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            res.status(200).send(`added ${req.body.product} to the table!`);
+          }
+        });
+      }
+    });
+  });
+
 }
