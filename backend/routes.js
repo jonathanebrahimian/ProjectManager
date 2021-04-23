@@ -1057,7 +1057,7 @@ module.exports = function routes(app, logger) {
           }
         });
 
-          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, materialSupplied = ?, companyName = ? where supplierID = ?", [firstName, lastName, username, password, email, materialSupplied, companyName, userID], function (err, result, fields) {
+          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, materialSupplied = ?, companyName = ? where supplierID = ?", [firstName, lastName, username, password, email, materialSupplied, companyName, supplierID], function (err, result, fields) {
             
             if (err) {
               // if there is an error with the query, log the error
@@ -1087,6 +1087,35 @@ module.exports = function routes(app, logger) {
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
           connection.query("DELETE FROM users WHERE userID = ?", userID, function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.status(200).send(result);
+            }
+          });
+        }
+      });
+
+    });
+
+    // DELETE
+    // /api/deleteit
+    app.delete('/suppliers', async (req, res) => {  
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } 
+        else {
+        let supplierID = req.param('supplierID');
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("DELETE FROM suppliers WHERE supplierID = ?", supplierID, function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
