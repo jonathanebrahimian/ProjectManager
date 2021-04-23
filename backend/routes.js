@@ -313,7 +313,8 @@ module.exports = function routes(app, logger) {
     });
   });
   
-    /* BODY FORMAT FOR POST:
+  // TO BE EDITED BY LAUREN
+    /* BODY FORMAT FOR POST: 
   {
 	  "goalName" : "Pool construction",
 	  "goalNotes" : "Lay concrete",
