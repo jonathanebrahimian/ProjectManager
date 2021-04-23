@@ -481,7 +481,7 @@ module.exports = function routes(app, logger) {
     });
 
     // POST /equipment{siteID}
-  app.post('/announcements', (req, res) => {
+  app.post('/equipment', (req, res) => {
     //console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -495,10 +495,14 @@ module.exports = function routes(app, logger) {
       let location = req.body.location;
       let siteID = req.body.siteID;
       let userID = req.body.userID;
+      let lastCheckout = req.body.lastCheckout;
+      if(lastCheckout === undefined && userID !== undefined){
+        lastCheckout = new Date();
+      }
       
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID) VALUES (?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID], function (err, result, fields) {
+        connection.query("INSERT INTO equipment (equipmentID, equipmentName, location, siteID, userID,lastCheckout) VALUES (?, ?, ?, ?, ?, ?)", [equipmentID, equipmentName, location, siteID, userID,lastCheckout], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
