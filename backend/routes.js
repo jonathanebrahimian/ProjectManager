@@ -121,13 +121,13 @@ module.exports = function routes(app, logger) {
       } else {
 		  let goalName = req.body.goalName;
 		  let goalNotes = req.body.goalNotes;
-		  let materials = req.body.materials;
+		  let materialID = req.body.materialID;
 		  let siteID = req.body.siteID;
 		  let userID = req.body.userID;
       let endDate = req.body.endDate;
 		  //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("INSERT INTO goals (goalName, goalNotes, materials, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materials, siteID, userID, endDate], function (err, rows, fields) {
+        connection.query("INSERT INTO goals (goalName, goalNotes, materialID, siteID, userID, endDate) VALUES (?, ?, ?, ?, ?, ?)", [goalName, goalNotes, materialID, siteID, userID, endDate], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
