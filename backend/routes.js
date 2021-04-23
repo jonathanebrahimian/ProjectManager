@@ -912,16 +912,15 @@ module.exports = function routes(app, logger) {
           res.status(400).send('Problem obtaining MySQL connection'); 
         } 
         else {
-        let userID = req.params.userID;
-        let firstName = req.params.firstName;
-        let lastName = req.params.lastName;
-        let username = req.params.username;
-        let email = req.params.email;
+        let userID = req.body.userID;
+        let firstName = req.body.firstName;
+        let lastName = req.body.lastName;
+        let email = req.body.email;
+        let username = req.body.username;
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          if(first_name == NULL)
-          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ?", [firstName, lastName, email, username], function (err, rows, fields) {
+          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ?", [firstName, lastName, email, username], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
