@@ -982,7 +982,7 @@ module.exports = function routes(app, logger) {
           res.status(400).send('Problem obtaining MySQL connection'); 
         } 
         else {
-        let userID = req.body.userID;
+        let userID = req.param('userID');
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var password = req.body.password;
