@@ -1088,10 +1088,10 @@ module.exports = function routes(app, logger) {
               }
           });
         }
-        }
+        
       };
       });
-    };
+    });
 
 
     // PUT /suppliers
