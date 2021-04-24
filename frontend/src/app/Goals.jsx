@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import { Link } from 'react-router-dom';
+import {GoalsList} from './GoalsList';
 
 export class Goals extends React.Component {
     state ={
@@ -51,6 +52,8 @@ export class Goals extends React.Component {
             onChange = {this.handleChange}
             placeholder = "Deadline (YYYY-MM-DD)"
             />
+            <GoalsList goals = {this.state.goals}/>
+            <GoalsList addGoals = {goals => this.addGoals(goals)} />
             <input type = "submit" value="Add Goal" />
         </form>
 
