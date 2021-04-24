@@ -533,7 +533,7 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM equipment WHERE siteID = ?", [siteID], function (err, result, fields) {
+        connection.query("SELECT * FROM equipment WHERE siteID = ? OR userID = ?", [siteID, userID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -877,13 +877,14 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
     } else {
       console.log("Inside put");
-      let equipmentID = req.body.equipmentID;
+      let equipmentID = req.param('equipmentID');
       let location = req.body.location;
+
       
       let userID = req.body.userID;
       let now = undefined;
-
-      if(userID !== undefined){
+      console.log(userID);
+      if(userID !== undefined || userID !== null){
         now = new Date();
       }
 
@@ -1086,7 +1087,8 @@ module.exports = function routes(app, logger) {
         }
         }
       };
-    });
+      });
+    };
 
 
     // PUT /suppliers
@@ -1135,7 +1137,7 @@ module.exports = function routes(app, logger) {
             }
           });
         }
-      };
+      });
     });
 
     // DELETE
