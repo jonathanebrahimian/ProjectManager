@@ -122,7 +122,7 @@ module.exports = function routes(app, logger) {
 		  let goalName = req.body.goalName;
 		  let goalNotes = req.body.goalNotes;
 		  let materialID = req.body.materialID;
-		  let siteID = req.body.siteID;
+		  let siteID = req.param('siteID');
 		  let userID = req.body.userID;
       let endDate = req.body.endDate;
       //console.log(req.param);
@@ -150,20 +150,22 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-      var siteID = req.param('siteID');
+        var siteID = req.param('siteID');
+        var userID = req.param('userID');
+
+
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM goals WHERE goals.siteID = ?", siteID, function (err, rows, fields) {
+        connection.query("SELECT * FROM goals WHERE goals.siteID = ? OR goals.userID = ?", [siteID,userID], function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
             res.status(400).json({
-              "data": [],
               "error": "Error obtaining values"
             })
           } else {
-            res.status(200).json({
-              "data": rows
-            });
+            res.status(200).json(
+              rows
+            );
           }
         });
       }
@@ -278,7 +280,7 @@ module.exports = function routes(app, logger) {
             logger.error("Problem deleting from the goals table: \n", err);
             res.status(400).send('Problem deleting from the table'); 
           } else {
-            res.status(200).send(`Deleted ${req.body.goalID} from the table!`);
+            res.status(200).send(`Deleted ${goalID} from the table!`);
           }
         });
       }
@@ -410,13 +412,14 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM materials WHERE siteID = ? OR supplierID = ?", [siteID, supplierID], function (err, result, fields) {
+        connection.query("SELECT materialID,status,quantity,materialSupplied,companyName FROM materials as m LEFT JOIN suppliers s on m.supplierID = s.supplierID WHERE m.siteID = ? OR m.supplierID = ?", [siteID, supplierID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem getting from test table: \n", err);
             res.status(400).send('Problem getting from table'); 
           } else {
+            console.log(result);
             res.status(200).send(result);
           }
         });
@@ -560,7 +563,7 @@ module.exports = function routes(app, logger) {
           console.log("IN ANNOUNCEMNT");
 
           let notes = req.body.notes;
-          let siteID = req.body.siteID;
+          let siteID = req.param('siteID');
           let userID = req.body.userID;
           let date = new Date();
           console.log("GOT PARAMS");
@@ -780,7 +783,7 @@ module.exports = function routes(app, logger) {
         let startDate = req.body.startDate;
         let endDate = req.body.endDate;
         let description = req.body.description;
-        let siteID = req.body.siteID;
+        let siteID = req.param('siteID');
 
         
         if(title !== undefined){
@@ -960,7 +963,7 @@ module.exports = function routes(app, logger) {
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT firstName, lastName, username, email FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ? OR userID = ?", [firstName, lastName, email, username, userID], function (err, result, fields) {
+          connection.query("SELECT firstName, lastName, username, email, userID,userType FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ? OR userID = ?", [firstName, lastName, email, username, userID], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -1250,6 +1253,8 @@ module.exports = function routes(app, logger) {
         let siteID = req.body.siteID;
         let email = req.body.email;
 
+        let valid = true;
+
         connection.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, log the error
@@ -1257,53 +1262,65 @@ module.exports = function routes(app, logger) {
             res.status(400).send('Problem inserting into table'); 
           } else {
             if(result.length > 0){
-                connection.release();
-                res.status(400).send("User email or password is already being used");
+              valid = false;
+              console.log("change to false");
+
+              res.status(200).send("User email or username is already being used");
+              connection.release();
+              
+
+
+            }else{
+              connection.query("SELECT * FROM suppliers WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
+                if (err) {
+                  // if there is an error with the query, log the error
+                  logger.error("Problem inserting into test table: \n", err);
+                  res.status(400).send('Problem inserting into table'); 
+                } else {
+                  if(result.length > 0){
+                      valid = false;
+                      console.log("change to false");
+
+                      res.status(200).send("User email or password is already being used");
+                      connection.release();
+      
+                  }else{
+                    if(userDescription === "builder" || userDescription === "site manager"){
+                      connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
+                        
+                        if (err) {
+                          // if there is an error with the query, log the error
+                          logger.error("Problem inserting into test table: \n", err);
+                          res.status(400).send('Problem inserting into table'); 
+                        } else {
+                          connection.release();
+                          res.status(200).send(result);
+                        }
+                      });
+                    }else if(userDescription === "supplier"){
+                      connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied, companyName) VALUES (?, ?, ?, ?, ?, ?, ?)", [firstName, lastName, username, password, email,materialSupplied,companyName], function (err, result, fields) {
+                        
+                        if (err) {
+                          // if there is an error with the query, log the error
+                          logger.error("Problem inserting into test table: \n", err);
+                          res.status(400).send('Problem inserting into table'); 
+                        } else {
+                          connection.release();
+                          res.status(200).send(result);
+                        }
+                      });
+            
+                    }
+                    
+                  }
+                }
+              });
             }
           }
         });
-
-        connection.query("SELECT * FROM suppliers WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
-          if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem inserting into test table: \n", err);
-            res.status(400).send('Problem inserting into table'); 
-          } else {
-            if(result.length > 0){
-                connection.release();
-                res.status(400).send("User email or password is already being used");
-            }
-          }
-        });
-
-        if(userDescription === "builder" || userDescription === "site manager"){
-          connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
-            
-            if (err) {
-              // if there is an error with the query, log the error
-              logger.error("Problem inserting into test table: \n", err);
-              res.status(400).send('Problem inserting into table'); 
-            } else {
-              connection.release();
-              res.status(200).send(result);
-            }
-          });
-        }else if(userDescription === "supplier"){
-          connection.query("INSERT INTO suppliers (firstName, lastName, username, password, email, materialSupplied, companyName) VALUES (?, ?, ?, ?, ?, ?, ?)", [firstName, lastName, username, password, email,materialSupplied,companyName], function (err, result, fields) {
-            
-            if (err) {
-              // if there is an error with the query, log the error
-              logger.error("Problem inserting into test table: \n", err);
-              res.status(400).send('Problem inserting into table'); 
-            } else {
-              connection.release();
-              res.status(200).send(result);
-            }
-          });
-
-        }
-
       }
+      //connection.release();
+
     });
   });
            
