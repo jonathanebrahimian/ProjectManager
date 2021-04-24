@@ -1007,17 +1007,83 @@ module.exports = function routes(app, logger) {
           }
         });
 
-          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, siteID = ? where userID = ?", [firstName, lastName, username, password, email, siteID, userID], function (err, result, fields) {
-            
+        if(firstName !== undefined){
+          //Title
+          connection.query("UPDATE users SET firstName = ? WHERE userID = ?", [firstName, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
-              logger.error("Problem inserting into test table: \n", err);
-              res.status(400).send('Problem inserting into table'); 
-            } else {
-              connection.release();
-              res.status(200).send(result);
-            }
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
           });
+        }
+
+        if(lastName !== undefined){
+          //Title
+          connection.query("UPDATE users SET lastName = ? WHERE userID = ?", [lastName, userID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+        if(password !== undefined){
+          //Title
+          connection.query("UPDATE users SET password = ? WHERE userID = ?", [password, userID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+        if(username !== undefined){
+          //Title
+          connection.query("UPDATE users SET username = ? WHERE userID = ?", [username, userID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+        if(email !== undefined){
+          //Title
+          connection.query("UPDATE users SET email = ? WHERE userID = ?", [email, userID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
+
+        if(siteID !== undefined){
+          //Title
+          connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, results, fields) {
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+              } else {
+                console.log("Updated title");
+              }
+          });
+        }
         }
       };
     });
