@@ -1,16 +1,17 @@
 import React, {Component, useState} from 'react';
 import { Link } from 'react-router-dom';
 import {GoalsList} from './GoalsList';
-import {testApi} from '../api/testApi';
+import {testApi} from '../api/testApi'
 
 export class Goals extends React.Component {
     repo = new testApi();
     state ={
         title: "",
         description: "",
-        materialID: "",
+        materialID: 1,
         deadline: "",
-        assignedWorker: "",
+        assignedWorker: 1,
+        siteID: 1
     }
 
     handleChange = event =>{
@@ -32,7 +33,9 @@ export class Goals extends React.Component {
             title: "",
             description: "",
             deadline: "",
-            assignedWorker: ""
+            materialID: 1,
+            assignedWorker: 1,
+            siteID: 1
         })
     }
     render(){
