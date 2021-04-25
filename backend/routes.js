@@ -549,6 +549,34 @@ module.exports = function routes(app, logger) {
       });
     });
 
+    app.get('/usersites', (req, res) => {
+      //console.log(req.body.product);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          let userID = req.param('userID');
+  
+  
+        //console.log(req.param);
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query("SELECT * FROM roster r LEFT JOIN sites s on r.siteID = s.siteID WHERE r.userID = ?", [userID], function (err, result, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem getting from test table: \n", err);
+              res.status(400).send('Problem getting from table'); 
+            } else {
+              res.status(200).send(result);
+            }
+          });
+        }
+      });
+    });
+
   // GET /equipment/{siteID}
   app.get('/equipment', (req, res) => {
     //console.log(req.body.product);
@@ -992,7 +1020,7 @@ module.exports = function routes(app, logger) {
   
         //console.log(req.param);
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query("SELECT firstName, lastName, username, email, userID,userType FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ? OR userID = ?", [firstName, lastName, email, username, userID], function (err, result, fields) {
+          connection.query("SELECT firstName, lastName, username, email, userID, userType FROM users WHERE firstName = ? OR lastName = ? OR email = ? OR username = ? OR userID = ?", [firstName, lastName, email, username, userID], function (err, result, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -1025,7 +1053,7 @@ module.exports = function routes(app, logger) {
         var password = req.body.password;
         var username = req.body.username;
         var email = req.body.email;
-        var siteID = req.body.siteID;
+        //var siteID = req.body.siteID;
 
         connection.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
           if (err) {
@@ -1105,18 +1133,18 @@ module.exports = function routes(app, logger) {
           });
         }
 
-        if(siteID !== undefined){
-          //Title
-          connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, results, fields) {
-            if (err) {
-              // if there is an error with the query, log the error
-              logger.error("Problem getting from test table: \n", err);
-              res.status(400).send('Problem getting from table'); 
-              } else {
-                console.log("Updated title");
-              }
-          });
-        }
+        // if(siteID !== undefined){
+        //   //Title
+        //   connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, results, fields) {
+        //     if (err) {
+        //       // if there is an error with the query, log the error
+        //       logger.error("Problem getting from test table: \n", err);
+        //       res.status(400).send('Problem getting from table'); 
+        //       } else {
+        //         console.log("Updated title");
+        //       }
+        //   });
+        // }
         
       };
       });
@@ -1382,15 +1410,29 @@ module.exports = function routes(app, logger) {
       
                   }else{
                     if(userDescription === "builder" || userDescription === "site manager"){
-                      connection.query("INSERT INTO users (userType, firstName, lastName, username, password, siteID, email) VALUES (?, ?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, siteID, email], function (err, result, fields) {
+                      connection.query("INSERT INTO users (userType, firstName, lastName, username, password, email) VALUES (?, ?, ?, ?, ?, ?)", [userType, firstName, lastName, username, password, email], function (err, result, fields) {
                         
                         if (err) {
                           // if there is an error with the query, log the error
                           logger.error("Problem inserting into test table: \n", err);
                           res.status(400).send('Problem inserting into table'); 
                         } else {
-                          connection.release();
-                          res.status(200).send(result);
+                          let userID = result['insertId'];
+                          if(siteID !== undefined){
+                            connection.query("INSERT INTO roster (userID, siteID) VALUES (?, ?)", [result['insertId'],siteID], function (err, result, fields) {
+                              if (err) {
+                                // if there is an error with the query, log the error
+                                logger.error("Problem inserting into test table: \n", err);
+                                res.status(400).send('Problem inserting into table'); 
+                              } else {
+                                connection.release();
+                                res.status(200).send("This is the userID created: " + userID);
+                              }
+                            });  
+                          }else{
+                            connection.release();
+                            res.status(200).send("This is the userID created: " + userID);
+                          }                       
                         }
                       });
                     }else if(userDescription === "supplier"){
