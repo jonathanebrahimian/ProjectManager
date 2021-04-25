@@ -9,7 +9,7 @@ import { SiteDetails } from './app/SiteDetails'
 export const ROUTES = [
   {path: '/', exact: true, component: Home},
   {path: '/home/:userID', component: Home},
-  {path: '/materials', component: Materials},
+  {path: '/materials/:siteID', component: Materials},
   {path: '/site/:siteID', component: SiteDetails},
   // {path: '/login', component: Login}
 ]

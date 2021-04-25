@@ -1,24 +1,56 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
 /*
   Component that shows a LIST of clickable materials for a given site. 
   The clickable elements shown as a list will redirect to a component that displays specific info about the selected material.
 */
 
+const config = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}
+
+async function getMaterials(payload) {
+  return new Promise((resolve, reject) => {
+      axios.get('http://localhost:8000/materials/',{ params: { siteID: payload } } , config)
+          .then(x => {
+              resolve(x.data)
+              // console.log(x.data)
+          })
+          .catch(x => reject(x.data))
+  })
+}
+
 export class Materials extends React.Component {
-  state = {}
+  state = {materials: []}
+
+  componentDidMount() {
+    // if(!this.state.materials) {
+      const id = this.props.match.params.siteID
+      // this.setState({ myArray: [...this.state.myArray, ...[1,2,3] ] }) //another array
+      getMaterials(id).then(x => {
+        this.setState({materials: [...this.state.materials, ...x]})
+      })
+    // }
+  }
 
   render() {
     return <>
+    {/* {console.log(this.state.materials.length)} */}
       <div class="list-group">
-        <Link to={'/site'} class="list-group-item list-group-item-action active">
-          Material for site: example site
+        <Link to={'/site/' + this.props.match.params.siteID} class="list-group-item list-group-item-action active">
+          {this.props.location.state.title ? this.props.location.state.title : this.props.match.params.siteID}
         </Link>
-        <a href="#" class="list-group-item list-group-item-action">Material 1</a>
-        <a href="#" class="list-group-item list-group-item-action">Material 2</a>
-        <a href="#" class="list-group-item list-group-item-action">Material 3</a>
-        <a href="#" class="list-group-item list-group-item-action disabled">Material 4</a>
+
+        {
+          this.state.materials.map(material =>
+            <h2>{ material.materialSupplied }</h2>
+          )
+        }
       </div>
     </>
   }

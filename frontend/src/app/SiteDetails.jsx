@@ -47,13 +47,6 @@ export class SiteDetails extends React.Component {
 
   render() {
     return <>
-      {/* <h1>Site Details</h1>
-      <h2>{this.state.siteID}</h2>
-      <h2>{this.state.description}</h2>
-      <h2>{this.state.startDate}</h2>
-      <h2>{this.state.endDate}</h2>
-      <h2>{this.state.location}</h2>
-      <h2>{this.state.title}</h2> */}
       {/* <div className="row">
         <div className="col-sm-6"> */}
           <div class="jumbotron">
@@ -63,7 +56,7 @@ export class SiteDetails extends React.Component {
             <p>{this.state.startDate}</p>
             <p>{this.state.endDate}</p>
             <p class="lead">
-              <a class="btn btn-primary btn-lg" href="#" role="button">View Materials</a>
+              <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title}}}>View Materials</Link>
             </p>
           </div>
         {/* </div>
