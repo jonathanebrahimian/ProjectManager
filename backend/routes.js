@@ -346,7 +346,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // GET all users who supply materials
+  // POST users who supply materials
   app.post('/suppliers', (req, res) => {
       // obtain a connection from our pool of connections
       pool.getConnection(function (err, connection){
@@ -721,7 +721,7 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM announcements WHERE siteID = ?", [siteID], function (err, result, fields) {
+          connection.query("SELECT id,date,notes,u.userID,siteID,userType,firstName,lastName,username,email FROM announcements a LEFT JOIN users u on a.userID = u.userID WHERE a.siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -731,9 +731,9 @@ module.exports = function routes(app, logger) {
             res.status(200).send(result);
           }
         });
-      }
-    });
+    }
   });
+});
 
 
   //get roster
@@ -751,7 +751,7 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM roster WHERE siteID = ?", [siteID], function (err, result, fields) {
+        connection.query("SELECT u.userID,siteID,userType,firstName,lastName,username,email FROM roster r LEFT JOIN users u on r.userID = u.userID WHERE r.siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -849,6 +849,7 @@ module.exports = function routes(app, logger) {
               let endDate = req.body.endDate;
               let description = req.body.description;
               let userID = req.body.userID;
+              let title = req.body.title;
               console.log("GOT PARAMS");
 
               let siteID = 0;
@@ -856,7 +857,7 @@ module.exports = function routes(app, logger) {
               
               //console.log(req.param);
                 // if there is no issue obtaining a connection, execute query and release connection
-                connection.query("INSERT INTO sites (description, startDate, endDate, location) VALUES (?, ?, ?, ?)", [description, startDate, endDate, location], function (err, result, fields) {
+                connection.query("INSERT INTO sites (description, startDate, endDate, location, title) VALUES (?, ?, ?, ?, ?)", [description, startDate, endDate, location, title], function (err, result, fields) {
                   if (err) {
                     // if there is an error with the query, log the error
                     logger.error("Problem inserting into test table: \n", err);
@@ -1114,7 +1115,6 @@ module.exports = function routes(app, logger) {
         var password = req.body.password;
         var username = req.body.username;
         var email = req.body.email;
-        //var siteID = req.body.siteID;
 
         connection.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
           if (err) {
@@ -1130,66 +1130,66 @@ module.exports = function routes(app, logger) {
         });
 
         if(firstName !== undefined){
-          //Title
+          
           connection.query("UPDATE users SET firstName = ? WHERE userID = ?", [firstName, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
               } else {
-                console.log("Updated title");
+                console.log("Updated first name");
               }
           });
         }
 
         if(lastName !== undefined){
-          //Title
+          
           connection.query("UPDATE users SET lastName = ? WHERE userID = ?", [lastName, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
               } else {
-                console.log("Updated title");
+                console.log("Updated last name");
               }
           });
         }
 
         if(password !== undefined){
-          //Title
+          
           connection.query("UPDATE users SET password = ? WHERE userID = ?", [password, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
               } else {
-                console.log("Updated title");
+                console.log("Updated password");
               }
           });
         }
 
         if(username !== undefined){
-          //Title
+          
           connection.query("UPDATE users SET username = ? WHERE userID = ?", [username, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
               } else {
-                console.log("Updated title");
+                console.log("Updated username");
               }
           });
         }
 
         if(email !== undefined){
-          //Title
+          
           connection.query("UPDATE users SET email = ? WHERE userID = ?", [email, userID], function (err, results, fields) {
             if (err) {
               // if there is an error with the query, log the error
               logger.error("Problem getting from test table: \n", err);
               res.status(400).send('Problem getting from table'); 
               } else {
-                console.log("Updated title");
+                console.log("Updated email");
               }
           });
         }
@@ -1224,7 +1224,6 @@ module.exports = function routes(app, logger) {
         } 
         else {
         let supplierID = req.param('supplierID');
-        let userDescription = req.body.userDescription;
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var password = req.body.password;
@@ -1233,33 +1232,83 @@ module.exports = function routes(app, logger) {
         var materialSupplied = req.body.materialSupplied;
         var companyName = req.body.companyName;
 
-        connection.query("SELECT * FROM suppliers WHERE email = ? OR username = ?", [email, username], function (err, result, fields) {
-          if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem inserting into test table: \n", err);
-            res.status(400).send('Problem inserting into table'); 
-          } else {
-            if(result.length > 0){
-                connection.release();
-                res.status(400).send("User email or password is already being used");
-            }
-          }
-        });
-
-          connection.query("UPDATE users SET firstName = ?, lastName = ?, username = ?, password = ?, email = ?, materialSupplied = ?, companyName = ? where supplierID = ?", [firstName, lastName, username, password, email, materialSupplied, companyName, supplierID], function (err, result, fields) {
-            
-            if (err) {
-              // if there is an error with the query, log the error
-              logger.error("Problem inserting into test table: \n", err);
-              res.status(400).send('Problem inserting into table'); 
-            } else {
-              connection.release();
-              res.status(200).send(result);
-            }
-          });
+          // if there is no issue obtaining a connection, execute query and release connection
+    if (firstName !== undefined) {
+      connection.query("UPDATE suppliers SET suppliers.firstName = ? WHERE supplierID = (?)", [firstName, supplierID], function (err, rows, fields) {
+        
+    if (err) {
+          // if there is an error with the query, log the error
+          logger.error("Problem updating the goals table: \n", err);
+          res.status(400).send('Problem updating the table'); 
         }
       });
+  }
+   if (lastName !== undefined) {
+    connection.query("UPDATE suppliers SET suppliers.lastName = ? WHERE supplierID = (?)", [lastName, supplierID], function (err, rows, fields) {
+       
+    if (err) {
+          // if there is an error with the query, log the error
+          logger.error("Problem updating the goals table: \n", err);
+          res.status(400).send('Problem updating the table'); 
+        }
+      });
+  }
+  if (password !== undefined) {
+    connection.query("UPDATE suppliers SET suppliers.password = ? WHERE supplierID = (?)", [password, supplierID], function (err, rows, fields) {
+     
+    if (err) {
+          // if there is an error with the query, log the error
+          logger.error("Problem updating the goals table: \n", err);
+          res.status(400).send('Problem updating the table'); 
+        }
+      });
+  }
+  if(username !== undefined){
+    connection.query("UPDATE suppliers SET username = ? WHERE supplierID = ?", [username, supplierID], function (err, results, fields) {
+      if (err) {
+        // if there is an error with the query, log the error
+        logger.error("Problem getting from test table: \n", err);
+        res.status(400).send('Problem getting from table'); 
+        } else {
+          console.log("Updated username");
+        }
     });
+  }
+    if (email !== undefined) {
+      connection.query("UPDATE suppliers SET suppliers.email = ? WHERE supplierID = (?)", [email, supplierID], function (err, rows, fields) {
+        
+        if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem updating the goals table: \n", err);
+              res.status(400).send('Problem updating the table'); 
+            }
+      });
+    }
+    if (materialSupplied !== undefined) {
+      connection.query("UPDATE suppliers SET suppliers.materialSupplied = ? WHERE supplierID = (?)", [materialSupplied, supplierID], function (err, rows, fields) {
+       
+      if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }
+        });
+    }
+      if (companyName !== undefined) {
+        connection.query("UPDATE suppliers SET suppliers.companyName = ? WHERE supplierID = (?)", [companyName, supplierID], function (err, rows, fields) {
+          
+          if (err) {
+                // if there is an error with the query, log the error
+                logger.error("Problem updating the goals table: \n", err);
+                res.status(400).send('Problem updating the table'); 
+              }
+        });
+      }
+    connection.release();
+    res.status(200).send(`Updated the specified elements in the table!`);
+  }
+  });
+});
 
     // DELETE
     // /api/deleteit
@@ -1466,7 +1515,7 @@ module.exports = function routes(app, logger) {
                       valid = false;
                       console.log("change to false");
 
-                      res.status(200).send("User email or password is already being used");
+                      res.status(200).send("User email or username is already being used");
                       connection.release();
       
                   }else{
