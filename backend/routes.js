@@ -1015,7 +1015,7 @@ module.exports = function routes(app, logger) {
       else {
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT firstName, lastName, username, email, siteID FROM users WHERE userType = 1", function (err, result, fields) {
+        connection.query("SELECT firstName, lastName, username, email FROM users WHERE userType = 1", function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
