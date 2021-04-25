@@ -63,7 +63,7 @@ export default function Home(props) {
         zIndex: "2"
     }
     return(<>
-          <h1>{props.match.params.userID}</h1>
+          {/* <h1>{props.match.params.userID}</h1> */}
           <div>
             <Site sites={sites || []} />
           </div>
