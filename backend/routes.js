@@ -185,6 +185,37 @@ module.exports = function routes(app, logger) {
     "endDate" : "2021-04-30"
   }
   */
+ app.put('/materials', (req, res) => {
+  //console.log(req.body.product);
+  // obtain a connection from our pool of connections
+  pool.getConnection(function (err, connection){
+    if(err){
+      // if there is an issue obtaining a connection, release the connection instance and log the error
+      logger.error('Problem obtaining MySQL connection',err)
+      res.status(400).send('Problem obtaining MySQL connection'); 
+    } else {
+    var materialID = req.param('materialID');
+    let status = req.body.status;
+
+
+    if (status !== undefined) {
+      connection.query("UPDATE materials SET status = ? WHERE materialID = (?)", [status, materialID], function (err, rows, fields) {
+      
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem updating the goals table: \n", err);
+            res.status(400).send('Problem updating the table'); 
+          }else{
+            connection.release();
+            res.status(200).send(`Updated the specified elements in materials table!`);
+          }
+          
+        });
+    }
+
+  }
+  });
+});
 
    // Update a goal for a specific site
   app.put('/goals', (req, res) => {
