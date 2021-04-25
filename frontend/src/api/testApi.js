@@ -33,8 +33,15 @@ export class testApi {
 
   //Goals API
   addGoal(goalName,goalNotes,materialID,siteID,userID,endDate){
+    let goal ={
+      "goalName": goalName,
+      "goalNotes": goalNotes,
+      "materialID": materialID,
+      "userID": userID,
+      "endDate": endDate
+    }
     return new Promise((resolve, reject)=>{
-        axios.post(`${this.url}/goals`,goalName,goalNotes,materialID,siteID,userID,endDate)
+        axios.post(`${this.url}/${siteID}/goals`,goal)
         .then(x => resolve(x.data))
                 .catch(error => {
                     alert(error);

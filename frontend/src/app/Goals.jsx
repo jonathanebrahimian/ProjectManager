@@ -1,13 +1,16 @@
 import React, {Component, useState} from 'react';
 import { Link } from 'react-router-dom';
 import {GoalsList} from './GoalsList';
+import {testApi} from '../api/testApi';
 
 export class Goals extends React.Component {
+    repo = new testApi();
     state ={
         title: "",
         description: "",
+        materialID: "",
         deadline: "",
-        assignedWorker: ""
+        assignedWorker: "",
     }
 
     handleChange = event =>{
@@ -24,6 +27,7 @@ export class Goals extends React.Component {
             assignedWorkers: this.state.assignedWorkers,
             complete: false
         })
+        this.repo.addGoal( this.state.title,this.state.description,this.state.materialID,this.state.siteID,this.state.assignedWorker,this.state.deadline)
         this.setState({
             title: "",
             description: "",
@@ -52,8 +56,6 @@ export class Goals extends React.Component {
             onChange = {this.handleChange}
             placeholder = "Deadline (YYYY-MM-DD)"
             />
-            <GoalsList goals = {this.state.goals}/>
-            <GoalsList addGoals = {goals => this.addGoals(goals)} />
             <input type = "submit" value="Add Goal" />
         </form>
 

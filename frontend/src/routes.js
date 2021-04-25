@@ -11,5 +11,6 @@ export const ROUTES = [
   {path: '/', exact: true, component: Login},
   {path: '/materials', component: Materials},
   {path: '/site', component: Site},
-  {path: '/goals', component: GoalsList}
+  {path: '/goals/:siteID', component: GoalsList},
+  //{path: './register', component: Register}
 ]

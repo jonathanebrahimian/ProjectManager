@@ -64,10 +64,6 @@ const Register =()=>{
 
             </div>
         </form>
-    )
-
-    
-
-
+      )
 }
 export default Register;
