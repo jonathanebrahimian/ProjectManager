@@ -1,24 +1,25 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 
 export class Site extends React.Component {
-  state = {}
-
   render() {
     return <>
-      <div class="jumbotron">
-        <h1 class="display-4">Example Site</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <hr class="my-4" />
-        <p class="lead">
-          <li>goal 1</li>
-          <li>goal 2</li>
-          <li>goal 3</li>
-        </p>
-        <p class="lead">
-          <Link class="btn btn-primary btn-lg"  role="button" to={'/materials'}>Available Materials</Link>
-        </p>
+      <div className="row">
+        { 
+          this.props.sites.map(site =>
+            <div className="col-sm-4" key={site.siteID}>
+              <div class="card" styles="width: 18rem;">
+                <img src="https://via.placeholder.com/50" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="card-title">{site.title}</h5>
+                  <p class="card-text">{site.description}</p>
+                  <a href="#" class="btn btn-primary">Go to site</a>
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   }

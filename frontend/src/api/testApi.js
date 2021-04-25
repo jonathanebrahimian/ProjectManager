@@ -29,6 +29,46 @@ export class testApi {
         .catch(x => reject(x.data))
     })
   }
+
+
+  //Goals API
+  addGoal(goalName,goalNotes,materialID,siteID,userID,endDate){
+    let goal ={
+      "goalName": goalName,
+      "goalNotes": goalNotes,
+      "materialID": materialID,
+      "userID": userID,
+      "endDate": endDate
+    }
+    return new Promise((resolve, reject)=>{
+        axios.post(`${this.url}/goals`,goal, { params: { siteID: siteID } }, this.config)
+        .then(x => resolve(x.data))
+                .catch(error => {
+                    alert(error);
+                    reject(error);
+                });
+    });
+  }
+  updateGoal(goalID,goalName,goalNotes,materialID,userID,endDate){
+    return new Promise((resolve, reject)=>{
+    axios.put(`${this.url}/goals`, goalID,goalName,goalNotes,materialID,userID,endDate)
+    .then(x => resolve(x.data))
+                .catch(error => {
+                    alert(error);
+                    reject(error);
+                });
+    });
+  }
+  deleteGoal(goalID){
+    return new Promise((resolve,reject)=>{
+      axios.delete(`${this.url}/goals`, goalID)
+      .then(x => resolve(x.data))
+                .catch(error => {
+                    alert(error);
+                    reject(error);
+                });
+    });
+  }
 }
 
 export default testApi
