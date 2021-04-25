@@ -14,7 +14,7 @@ export class Site extends React.Component {
                 <div class="card-body">
                   <h5 class="card-title">{site.title}</h5>
                   <p class="card-text">{site.description}</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <a href="#" class="btn btn-primary">Go to site</a>
                 </div>
               </div>
             </div>

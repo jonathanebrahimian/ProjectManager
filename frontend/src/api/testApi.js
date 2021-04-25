@@ -41,7 +41,7 @@ export class testApi {
       "endDate": endDate
     }
     return new Promise((resolve, reject)=>{
-        axios.post(`${this.url}/${siteID}/goals`,goal, this.config)
+        axios.post(`${this.url}/goals`,goal, { params: { siteID: siteID } }, this.config)
         .then(x => resolve(x.data))
                 .catch(error => {
                     alert(error);
