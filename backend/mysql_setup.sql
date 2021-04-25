@@ -23,8 +23,15 @@ create table users (
     , username varchar (50)
     , email VARCHAR(100)
     , password varchar (50)
-    , siteID int DEFAULT NULL
-    , foreign key (siteID) references sites (siteID)
+);
+
+CREATE TABLE roster (
+    `rosterID` INT NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY(`rosterID`),
+    siteID INT NOT NULL,
+    FOREIGN KEY (siteID) REFERENCES sites(siteID)  ON DELETE CASCADE,
+    userID INT NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID)  ON DELETE CASCADE
 );
 
 -- Equipment Lauren

@@ -662,7 +662,7 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM users WHERE siteID = ?", [siteID], function (err, result, fields) {
+        connection.query("SELECT * FROM roster WHERE siteID = ?", [siteID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -777,7 +777,7 @@ module.exports = function routes(app, logger) {
 
                     siteID = result['insertId'];
     
-                    connection.query("UPDATE users SET siteID = ? WHERE userID = ?", [siteID, userID], function (err, result, fields) {
+                    connection.query("INSERT INTO roster (siteID,userID) VALUES (?,?)", [siteID, userID], function (err, result, fields) {
                       connection.release();
                       if (err) {
                         // if there is an error with the query, log the error
