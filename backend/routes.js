@@ -654,7 +654,7 @@ module.exports = function routes(app, logger) {
 
       //console.log(req.param);
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query("SELECT * FROM equipment WHERE siteID = ? OR userID = ?", [siteID, userID], function (err, result, fields) {
+        connection.query("SELECT equipmentID,equipmentName,siteID,location,lastCheckout, u.userID,siteID,userType,firstName,lastName,username,email FROM equipment e LEFT JOIN users u on e.userID = u.userID WHERE siteID = ? OR u.userID = ?", [siteID, userID], function (err, result, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
