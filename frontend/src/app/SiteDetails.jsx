@@ -15,8 +15,9 @@ export class SiteDetails extends React.Component {
     startDate: "",
     endDate: "",
     location: "",
-    title: ""
+    title: "",
   }
+
 
   async getSite(payload) {
     return new Promise((resolve, reject) => {
@@ -28,7 +29,9 @@ export class SiteDetails extends React.Component {
             .catch(x => reject(x.data))
     })
   }
-
+  componentWillMount(){
+		this.siteID = this.props.match.params.siteID;
+	}
   componentDidMount() {
     const id = this.props.match.params.siteID
     this.setState({siteID: id})
@@ -57,6 +60,9 @@ export class SiteDetails extends React.Component {
             <p>{this.state.endDate}</p>
             <p class="lead">
               <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title}}}>View Materials</Link>
+            </p>
+            <p class="lead">
+            <Link to={`/goals/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Goals</Link>
             </p>
           </div>
         {/* </div>

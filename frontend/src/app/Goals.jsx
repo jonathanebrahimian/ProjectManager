@@ -1,17 +1,13 @@
-import React, {Component, useState} from 'react';
-import { Link } from 'react-router-dom';
-import {GoalsList} from './GoalsList';
-import {testApi} from '../api/testApi'
+import React from 'react';
+import {goals} from '../models/goals';
 
 export class Goals extends React.Component {
-    repo = new testApi();
     state ={
-        title: "",
-        description: "",
-        materialID: 1,
-        deadline: "",
-        assignedWorker: 1,
-        siteID: 1
+        goalName: "",
+        goalNotes: "",
+        materialID:1,
+        endDate: "",
+        userID:1,
     }
 
     handleChange = event =>{
@@ -19,48 +15,43 @@ export class Goals extends React.Component {
             [event.target.name]: event.target.value
         });
     };
-    handleSubmit = (event) =>{
-        event.preventDefault();
-        this.props.onSubmit({
-            title: this.state.title,
-            description: this.state.description,
-            deadline: this.state.deadline,
-            assignedWorkers: this.state.assignedWorkers,
-            complete: false
-        })
-        this.repo.addGoal( this.state.title,this.state.description,this.state.materialID,this.state.siteID,this.state.assignedWorker,this.state.deadline)
+    onChange(){
+        this.props.addGoal(new goals(this.state.goalName,this.state.goalNotes,this.state.materialID,this.state.userID,this.state.endDate));
         this.setState({
-            title: "",
-            description: "",
-            deadline: "",
+            goalName: "",
+            goalNotes: "",
             materialID: 1,
-            assignedWorker: 1,
-            siteID: 1
+            endDate: "",
+            userID: 1,
         })
     }
     render(){
         return<>
-        <form onSubmit={this.handleSubmit}>
+        <div className = "goals-area">
             <input
-            name = "title"
-            value ={this.state.title}
+            name = "goalName"
+            value ={this.state.goalName}
             onChange = {this.handleChange}
             placeholder = "Goal Title"
             />
             <input
-            name = "description"
-            value ={this.state.description}
+            name = "goalNotes"
+            value ={this.state.goalNotes}
             onChange = {this.handleChange}
             placeholder = "Goal Description"
             />
             <input
-            name = "deadline"
-            value = {this.state.deadline}
+            name = "endDate"
+            value = {this.state.endDate}
             onChange = {this.handleChange}
             placeholder = "Deadline (YYYY-MM-DD)"
             />
-            <input type = "submit" value="Add Goal" />
-        </form>
+            <div class="row mt-4 mb-4">
+                <div class="col-12">
+                    <button onClick = {()=>this.onChange()} type = "button" class = "btn btn-primary">Add Goal</button>
+                </div>
+            </div> 
+        </div>
 
         </>
 
