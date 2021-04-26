@@ -11,11 +11,14 @@ const config = {
   }
 }
 
+let status_flag = 0;
+
 async function getSites(payload) {
   return new Promise((resolve, reject) => {
       axios.get('http://localhost:8000/usersites',{ params: { userID: payload } } , config)
           .then(x => {
               resolve(x.data)
+              status_flag += x.data.length
               console.log(x.data)
           })
           .catch(x => reject(x.data))
@@ -62,9 +65,17 @@ export default function Home(props) {
         padding: "30px",
         zIndex: "2"
     }
+    const create_site_button = {
+      backgroundColor: '#208000',
+      width: '100%',
+      marginBottom: '10px'
+    }
     return(<>
-          {/* <h1>{props.match.params.userID}</h1> */}
+          {/* {console.log(sites.length)} */}
           <div>
+            {
+              status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/site/create/' + userID}>Create a Site</Link>: null
+            }
             <Site sites={sites || []} />
           </div>
     </>)
