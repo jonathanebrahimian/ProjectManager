@@ -5,11 +5,15 @@ import { Materials } from './app/Materials'
 import { Site } from './app/Site'
 import Home from './app/Home'
 import { SiteDetails } from './app/SiteDetails'
+import CreateSite from './app/CreateSite'
+import { LogOut } from './app/LogOut'
 
 export const ROUTES = [
   {path: '/', exact: true, component: Home},
   {path: '/home/:userID', component: Home},
   {path: '/materials/:siteID', component: Materials},
-  {path: '/site/:siteID', component: SiteDetails},
-  // {path: '/login', component: Login}
+  {path: '/site/:siteID', exact: true, component: SiteDetails},
+  {path: '/site/create/:userID', component: CreateSite},
+  {path: '/logout', component: LogOut},
+  {path: '/login', component: Login}
 ]
