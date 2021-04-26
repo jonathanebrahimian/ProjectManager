@@ -32,14 +32,7 @@ export class testApi {
 
 
   //Goals API
-  addGoal(goalName,goalNotes,materialID,siteID,userID,endDate){
-    let goal ={
-      "goalName": goalName,
-      "goalNotes": goalNotes,
-      "materialID": materialID,
-      "userID": userID,
-      "endDate": endDate
-    }
+  addGoal(siteID, goal){
     return new Promise((resolve, reject)=>{
         axios.post(`${this.url}/goals`,goal, { params: { siteID: siteID } }, this.config)
         .then(x => resolve(x.data))
@@ -49,9 +42,9 @@ export class testApi {
                 });
     });
   }
-  updateGoal(goalID,goalName,goalNotes,materialID,userID,endDate){
+  updateGoal(goalID,goal){
     return new Promise((resolve, reject)=>{
-    axios.put(`${this.url}/goals`, goalID,goalName,goalNotes,materialID,userID,endDate)
+    axios.put(`${this.url}/goals`, goal,{ params: { goalID: goalID } }, this.config)
     .then(x => resolve(x.data))
                 .catch(error => {
                     alert(error);
@@ -61,7 +54,27 @@ export class testApi {
   }
   deleteGoal(goalID){
     return new Promise((resolve,reject)=>{
-      axios.delete(`${this.url}/goals`, goalID)
+      axios.delete(`${this.url}/goals`, {params: {goalID:goalID}})
+      .then(x => resolve(x.data))
+                .catch(error => {
+                    alert(error);
+                    reject(error);
+                });
+    });
+  }
+  getGoal(siteID,userID){
+    return new Promise((resolve,reject)=>{
+      axios.get(`${this.url}/goals`,{ params: { siteID: siteID,userID: userID}},this.config)
+      .then(x => resolve(x.data))
+                .catch(error => {
+                    alert(error);
+                    reject(error);
+                });
+    });
+  }
+  getGoal(siteID){
+    return new Promise((resolve,reject)=>{
+      axios.get(`${this.url}/goals`,{ params: { siteID: siteID}},this.config)
       .then(x => resolve(x.data))
                 .catch(error => {
                     alert(error);
