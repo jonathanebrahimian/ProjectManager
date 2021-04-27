@@ -4,12 +4,16 @@ import { LogOut } from './LogOut'
 
 export class Nav extends React.Component {
 
-  state = {}
+  state = {token: 0}
+
+  componentDidMount() {
+    this.setState({token: this.props.token})
+  }
 
   render() {
     return <>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <Link class="navbar-brand" to={'/'}>Construction Manager</Link>
+        <Link class="navbar-brand" to={'/home/' + this.state.token}>Construction Manager</Link>
         <LogOut />
         {/* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>

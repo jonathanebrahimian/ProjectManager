@@ -28,8 +28,8 @@ async function getSites(payload) {
 export default function Home(props) {
     
   const [sites, setSites] = useState(undefined)
-  // const userID = props.match.params.userID
-  const userID = 26
+  const userID = props.match.params.userID
+  // const userID = 26
 
     useEffect(() => {
       if(!sites) {

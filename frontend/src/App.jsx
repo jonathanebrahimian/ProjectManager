@@ -16,7 +16,7 @@ function App() {
 
   return (
     <Router>
-      <Nav />
+      <Nav token={token}/>
       <Switch>
         { ROUTES.map((route, index) => <Route key={index} {...route} />)}
       </Switch>

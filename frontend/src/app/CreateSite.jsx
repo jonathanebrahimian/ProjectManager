@@ -60,6 +60,18 @@ export default function CreateSite(props) {
         <label for="exampleFormControlTextarea1">Description of the site</label>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" onChange={e => setDescription(e.target.value)}></textarea>
       </div>
+      <div class="form-group row">
+        <label for="example-date-input" class="col-2 col-form-label">Start Date</label>
+        <div class="col-10">
+          <input class="form-control" type="date" id="example-date-input" onChange={e => setStartDate(e.target.value)} />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="example-date-input" class="col-2 col-form-label">End Date</label>
+        <div class="col-10">
+          <input class="form-control" type="date" id="example-date-input" onChange={e => setEndDate(e.target.value)} />
+        </div>
+      </div>
       <button type="submit" class="btn btn-primary mb-2" style={create_site_button}>Create Site</button>
     </form>
   </>)

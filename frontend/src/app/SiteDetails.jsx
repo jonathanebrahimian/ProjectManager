@@ -57,8 +57,8 @@ export class SiteDetails extends React.Component {
             <h1 class="display-4">{this.state.title}</h1>
             <p class="lead">{this.state.description}</p>
             <hr class="my-4" />
-            <p>{this.state.startDate}</p>
-            <p>{this.state.endDate}</p>
+            <p>Start Date: {this.state.startDate}</p>
+            <p>End Date: {this.state.endDate}</p>
             <p class="lead">
               <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title, id: this.state.siteID}}}>View Materials</Link>
             </p>
