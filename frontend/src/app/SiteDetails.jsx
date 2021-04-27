@@ -63,6 +63,9 @@ export class SiteDetails extends React.Component {
               <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title, id: this.state.siteID}}}>View Materials</Link>
             </p>
             <p class="lead">
+            <Link to={`/roster/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Roster</Link>
+            </p>
+            <p class="lead">
             <Link to={`/goals/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Goals</Link>
             </p>
           </div>
