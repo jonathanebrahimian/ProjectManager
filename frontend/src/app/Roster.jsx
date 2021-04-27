@@ -14,9 +14,9 @@ const config = {
   }
 }
 
-async function getMaterials(payload) {
+async function getRoster(payload) {
   return new Promise((resolve, reject) => {
-      axios.get('http://localhost:8000/materials/',{ params: { siteID: payload } } , config)
+      axios.get('http://localhost:8000/roster/',{ params: { siteID: payload } } , config)
           .then(x => {
               resolve(x.data)
           })
@@ -24,8 +24,8 @@ async function getMaterials(payload) {
   })
 }
 
-export class Materials extends React.Component {
-  state = {siteID: 0, materials: []}
+export class Roster extends React.Component {
+  state = {siteID: 0, rosters: []}
 
   componentWillMount(){
 		this.state.siteID = this.props.match.params.siteID
@@ -33,11 +33,11 @@ export class Materials extends React.Component {
 
   componentDidMount() {
     // if(!this.state.materials) {
-      const id = this.props.location.state.id
+      const id = this.props.match.params.siteID
       console.log(id)
       // this.setState({ myArray: [...this.state.myArray, ...[1,2,3] ] }) //another array
-      getMaterials(id).then(x => {
-        this.setState({materials: [...this.state.materials, ...x]})
+      getRoster(id).then(x => {
+        this.setState({rosters: [...this.state.rosters, ...x]})
       })
     // }
   }
@@ -45,14 +45,11 @@ export class Materials extends React.Component {
   render() {
     return <>
       <div class="list-group">
-        <Link to={'/site/' + this.props.location.state.id} class="list-group-item list-group-item-action active">
-          {this.props.location.state.title ? this.props.location.state.title : this.props.location.state.id}
-        </Link>
 
         {
-          this.state.materials.map(material =>
+          this.state.rosters.map(roster =>
             <ul class="list-group">
-              <li class="list-group-item">{material.materialSupplied + ' (status: ' + material.status + ')'}<br /><Link className = "btn btn-primary btn-lg" to={'/editMaterials/' + material.materialID}>Edit Material</Link></li>
+              <li class="list-group-item">{roster.firstName + ' ' + roster.lastName}</li>
               {/* <li class="list-group-item">{material.status}</li> */}
             </ul>
           )

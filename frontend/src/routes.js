@@ -9,6 +9,10 @@ import {GoalsDetails} from './app/GoalsDetails'
 import CreateSite from './app/CreateSite'
 import { LogOut } from './app/LogOut'
 import { Builders } from './app/Builders'
+import { Suppliers } from './app/Suppliers'
+import EditMaterial from './app/EditMaterial'
+import AssignSite from './app/AssignSite'
+import { Roster } from './app/Roster'
 
 export const ROUTES = [
   {path: '/', exact: true, component: Home},
@@ -16,10 +20,14 @@ export const ROUTES = [
   {path: '/materials', component: Materials},
   // {path: '/site/:siteID', component: SiteDetails},
   {path: '/goals/:siteID', component: GoalsDetails},
-  {path: '/materials/:siteID', component: Materials},
+  {path: '/materials/:siteID', exact: true, component: Materials},
   {path: '/site/:siteID', exact: true, component: SiteDetails},
   {path: '/site/create/:userID', component: CreateSite},
   {path: '/logout', component: LogOut},
   {path: '/login', component: Login},
-  {path: '/builders', component: Builders}
+  {path: '/builders', component: Builders},
+  {path: '/suppliers', component: Suppliers},
+  {path: '/editMaterials/:materialID', component: EditMaterial},
+  {path: '/assignSite', component: AssignSite},
+  {path: '/roster/:siteID', component: Roster}
 ]

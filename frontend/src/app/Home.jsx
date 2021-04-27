@@ -82,6 +82,12 @@ export default function Home(props) {
           status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/site/create/' + userID}>Create a Site</Link>: null
         }
         {
+          status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/assignSite'}>Assign a Site</Link>: null
+        }
+        {
+          status_flag > 1 ? <Link class="btn btn-primary" style={get_builders_button} to={'/suppliers/'}>Get a list of Suppliers</Link>: null
+        }
+        {
           status_flag > 1 ? <Link class="btn btn-primary" style={get_builders_button} to={'/builders/'}>Get a list of Builders</Link>: null
         }
         <Site sites={sites || []} />
