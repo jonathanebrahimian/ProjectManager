@@ -30,12 +30,12 @@ export class SiteDetails extends React.Component {
     })
   }
   componentWillMount(){
-		this.siteID = this.props.match.params.siteID;
+		this.state.siteID = this.props.match.params.siteID;
 	}
   componentDidMount() {
     const id = this.props.match.params.siteID
     this.setState({siteID: id})
-    console.log(this.siteID)
+    // console.log("id: "+id)
     this.getSite(id).then(x => {
       this.setState({
         description: x.description,
@@ -52,6 +52,7 @@ export class SiteDetails extends React.Component {
     return <>
       {/* <div className="row">
         <div className="col-sm-6"> */}
+        {console.log(this.state.siteID)}
           <div class="jumbotron">
             <h1 class="display-4">{this.state.title}</h1>
             <p class="lead">{this.state.description}</p>
@@ -59,7 +60,7 @@ export class SiteDetails extends React.Component {
             <p>{this.state.startDate}</p>
             <p>{this.state.endDate}</p>
             <p class="lead">
-              <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title}}}>View Materials</Link>
+              <Link class="btn btn-primary btn-lg" role="button" to={{ pathname: '/materials/' + this.state.siteID, state: {title: this.state.title, id: this.state.siteID}}}>View Materials</Link>
             </p>
             <p class="lead">
             <Link to={`/goals/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Goals</Link>

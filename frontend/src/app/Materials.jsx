@@ -19,18 +19,22 @@ async function getMaterials(payload) {
       axios.get('http://localhost:8000/materials/',{ params: { siteID: payload } } , config)
           .then(x => {
               resolve(x.data)
-              // console.log(x.data)
           })
           .catch(x => reject(x.data))
   })
 }
 
 export class Materials extends React.Component {
-  state = {materials: []}
+  state = {siteID: 0, materials: []}
+
+  componentWillMount(){
+		this.state.siteID = this.props.match.params.siteID
+	}
 
   componentDidMount() {
     // if(!this.state.materials) {
-      const id = this.props.match.params.siteID
+      const id = this.props.location.state.id
+      console.log(id)
       // this.setState({ myArray: [...this.state.myArray, ...[1,2,3] ] }) //another array
       getMaterials(id).then(x => {
         this.setState({materials: [...this.state.materials, ...x]})
@@ -40,10 +44,9 @@ export class Materials extends React.Component {
 
   render() {
     return <>
-    {/* {console.log(this.state.materials.length)} */}
       <div class="list-group">
-        <Link to={'/site/' + this.props.match.params.siteID} class="list-group-item list-group-item-action active">
-          {this.props.location.state.title ? this.props.location.state.title : this.props.match.params.siteID}
+        <Link to={'/site/' + this.props.location.state.id} class="list-group-item list-group-item-action active">
+          {this.props.location.state.title ? this.props.location.state.title : this.props.location.state.id}
         </Link>
 
         {

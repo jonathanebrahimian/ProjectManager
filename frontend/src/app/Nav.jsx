@@ -34,7 +34,7 @@ export class Nav extends React.Component {
             {/* <li class="nav-item">
               <a class="nav-link" href="#">Employees</a>
             </li> */}
-            <li class="nav-item dropdown">
+            {/* <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Profile
               </a>
@@ -44,7 +44,7 @@ export class Nav extends React.Component {
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Account</a>
               </div>
-            </li>
+            </li> */}
           </ul>
         </div>
       </nav>

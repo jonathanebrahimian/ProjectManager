@@ -68,15 +68,23 @@ export default function Home(props) {
     const create_site_button = {
       backgroundColor: '#208000',
       width: '100%',
+      marginBottom: '5px'
+    }
+    const get_builders_button = {
+      backgroundColor: '##8FBC8F',
+      width: '100%',
       marginBottom: '10px'
     }
     return(<>
-          {/* {console.log(sites.length)} */}
-          <div>
-            {
-              status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/site/create/' + userID}>Create a Site</Link>: null
-            }
-            <Site sites={sites || []} />
-          </div>
+        {/* {console.log(sites.length)} */}
+        {/* <div> */}
+        {
+          status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/site/create/' + userID}>Create a Site</Link>: null
+        }
+        {
+          status_flag > 1 ? <Link class="btn btn-primary" style={get_builders_button} to={'/builders/'}>Get a list of Builders</Link>: null
+        }
+        <Site sites={sites || []} />
+        {/* </div> */}
     </>)
 }

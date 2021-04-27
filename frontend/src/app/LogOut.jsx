@@ -7,13 +7,14 @@ export class LogOut extends React.Component {
   logout = () => {
     localStorage.clear('token')
     this.setState({navigate: true})
+    window.location.reload()
   }
 
   render() {
     const { navigate } = this.state
 
     if(navigate) {
-      return <Redirect to="/login" Push={true} />
+      return <Redirect to="/" Push={true} />
     }
 
     return <button onClick={this.logout}>Log Out</button>
