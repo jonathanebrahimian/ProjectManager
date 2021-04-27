@@ -11,7 +11,7 @@ const config = {
 
 async function putMaterial(payload) {
   return new Promise((resolve, reject) => {
-      axios.put('http://localhost:8000/materials/', JSON.stringify(payload.body), { params: { materialID: payload.header } }, config)
+      axios.put('http://18.217.93.185:8000/materials/', JSON.stringify(payload.body), { params: { materialID: payload.header } }, config)
           .then(x => {
               resolve(x.data)
               console.log(x.data)

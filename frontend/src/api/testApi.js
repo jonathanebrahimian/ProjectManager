@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export class testApi {
-  url = 'http://localhost:8000'
+  url = 'http://18.217.93.185:8000'
 
   getValues() {
     return new Promise((resolve, reject) => {
@@ -81,6 +81,16 @@ export class testApi {
                     reject(error);
                 });
     });
+  }
+  registerUser(user){
+    return new Promise((resolve, reject)=>{
+      axios.post(`${this.url}/register`,user,this.config)
+      .then(x => resolve(x.data))
+              .catch(error => {
+                  alert(error);
+                  reject(error);
+              });
+  });
   }
 }
 

@@ -1,69 +1,130 @@
 import React, { useState } from "react";
+import Proptypes from 'prop-types'
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import {users} from '../models/users';
+import {testApi} from '../api/testApi';
+const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
 
-const Register =()=>{
-
-    const [details, setDetails] = useState({
+export class Register extends React.Component{
+    state={
         username: "",
         password: "",
-        user_type: "",
-      });
-      const submit = (e) => {
-        e.preventDefault();
-        console.log(details);
-      };
+        usertype: 1,
+        siteID: "",
+        firstname: "",
+        lastname: "",
+        companyname: "",
+        userdescription: "builder",
+        materials: "",
+        email: "",
+    }
 
-      const buttonStyle ={
-        display: "inline-block",
-        padding: "10px 15px",
-        borderRadius: "8px",
-        backgroundImage: "linear-gradient(to right, #FFCE00 50%, #FFCE00 50%, #FE4800",
-        backgroundSize: "200%",
-        backgroundPosition: "0%",
-        transition: "0.4s",
-        color: "black",
-        fontWeight: "700",
-        cursor: "pointer"
-        };
-        const pageStyle ={
-            height: "87vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#535651",
-        }
-        const loginbox ={
-            position: "relative",
-            display: "block",
-            backgroundColor: "#FFF",
-            padding: "30px",
-            zIndex: "2"
-        }
-      return(
-        <form onSubmit = {submit} style = {pageStyle}>
-            <div className = "form-inner" style = {loginbox}>
-                <h2>
-                    Register
-                </h2>
-                <div className = "form-group" style = {{textAlign:"center", paddingBottom:"10px"}}>
-                    <label htmlFor = "username">Username:</label>
-                    <input type = "text" username = "username" id = "username" onChange={e => setDetails({...details,username:e.target.value})} value={details.username} placeholder="Enter username"/>
-                </div>
-                <div className = "form-group" style = {{textAlign:"center", paddingBottom:"10px"}}>
-                    <label htmlFor = "password">Password: </label>
-                    <input type = "text" password = "password" id = "password"onChange={e => setDetails({...details,password:e.target.value})} value={details.password}placeholder="Enter password"/>
-                </div>
-                <div class="col-4" style = {{textAlign:"center", paddingBottom:"10px"}}>
-                    <label for = "ratingSelect">Job Role: </label>
-                    <select name = "role" id ="role" className = "form-control" onChange={e => setDetails({...details,user_type:e.target.value})} value={details.user_type}>
-                    <option value = "0"></option>
-                        <option value = "manager">Manager</option>
-                        <option value = "supplier">Supplier</option>
-                    </select>
-                </div>
-                <input type = "submit" value="Submit" style = {buttonStyle}/>
+    handleChange = event =>{
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    };
+    
+    onChange(){
+        this.props.addUsers(new users(this.state.usertype,this.state.userdescription,this.state.companyname,this.state.materials,this.state.firstname,this.state.lastname,this.state.username,this.state.password,this.state.siteID,this.state.email));
+        this.setState({
+        username: "",
+        password: "",
+        siteID: "",
+        usertype: 1,
+        firstname: "",
+        lastname: "",
+        companyname: "",
+        userdescription: "builder",
+        materials: "",
+        email: "",
+        })
+    }
 
+    
+
+    render(){
+        return<>
+            <div className="col-12 mb-3 text-center">
+                <h1>Add Member</h1>
             </div>
-        </form>
-      )
+            <div className="form-group mb-3">
+                <label htmlFor="firstname">First Name</label>
+                <input
+                 name = "firstname"
+                 value = {this.state.firstname}
+                 onChange ={this.handleChange}
+                 type = "text"   
+                 className="form-control"
+                 id="firstname"
+                 placeholder="Enter First Name"
+                />
+            </div>
+            <div className="form-group mb-3">
+                <label htmlFor="lastname">Last Name</label>
+                <input
+                 name = "lastname"
+                 value = {this.state.lastname}
+                 onChange ={this.handleChange}
+                 type = "text"   
+                 className="form-control"
+                 id="lastname"
+                 placeholder="Enter Last Name"
+                />
+            </div>
+            <div className="form-group mb-3">
+                <label htmlFor="email">Email</label>
+                <input
+                 name = "email"
+                 value = {this.state.email}
+                 onChange ={this.handleChange}
+                 type = "email"   
+                 className="form-control"
+                 id="email"
+                 placeholder={"Enter email"}
+                />
+            </div>
+            <div className="form-group mb-3">
+                <label htmlFor="companyname">Company Name</label>
+                <input
+                 name = "companyname"
+                 value = {this.state.companyname}
+                 onChange ={this.handleChange}
+                 type = "text"   
+                 className="form-control"
+                 id="companyname"
+                 placeholder="Enter Company Name"
+                />
+            </div>
+            <div className="form-group mb-3">
+                <label htmlFor="companyname">Site ID</label>
+                <input
+                 name = "siteID"
+                 value = {this.state.siteID}
+                 onChange ={this.handleChange}
+                 type = "text"   
+                 className="form-control"
+                 id="siteID"
+                 placeholder="Enter Site ID to be added to"
+                />
+            </div>
+            <div className="col-12 text-center">
+            <button
+                type="button"
+                onClick={() =>
+                this.onChange()
+                }
+                className="btn btn-primary mx-auto"
+            >
+            Submit
+            </button>
+            </div>
+            
+        </>
+    }
 }
-export default Register;

@@ -16,7 +16,7 @@ const config = {
 
 async function getMaterials(payload) {
   return new Promise((resolve, reject) => {
-      axios.get('http://localhost:8000/materials/',{ params: { siteID: payload } } , config)
+      axios.get('http://18.217.93.185:8000/materials/',{ params: { siteID: payload } } , config)
           .then(x => {
               resolve(x.data)
           })
