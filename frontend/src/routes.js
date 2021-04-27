@@ -8,6 +8,7 @@ import { SiteDetails } from './app/SiteDetails'
 import {GoalsDetails} from './app/GoalsDetails'
 import CreateSite from './app/CreateSite'
 import { LogOut } from './app/LogOut'
+import Register from './app/Register'
 
 export const ROUTES = [
   {path: '/', exact: true, component: Home},
@@ -19,5 +20,6 @@ export const ROUTES = [
   {path: '/site/:siteID', exact: true, component: SiteDetails},
   {path: '/site/create/:userID', component: CreateSite},
   {path: '/logout', component: LogOut},
-  {path: '/login', component: Login}
+  {path: '/login', component: Login},
+  {path: '/register', component: Register}
 ]

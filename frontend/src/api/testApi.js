@@ -82,6 +82,16 @@ export class testApi {
                 });
     });
   }
+  registerUser(user){
+    return new Promise((resolve, reject)=>{
+      axios.post(`${this.url}/register`,user,this.config)
+      .then(x => resolve(x.data))
+              .catch(error => {
+                  alert(error);
+                  reject(error);
+              });
+  });
+  }
 }
 
 export default testApi

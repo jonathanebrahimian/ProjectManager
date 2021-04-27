@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Proptypes from 'prop-types'
 import axios from 'axios';
+import {Register} from './Register';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -64,7 +65,7 @@ export function Login({ setToken }) {
     cursor: "pointer"
     };
     const pageStyle ={
-        height: "87vh",
+        height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
