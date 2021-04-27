@@ -15,7 +15,7 @@ let status_flag = 0;
 
 async function getSites(payload) {
   return new Promise((resolve, reject) => {
-      axios.get('http://localhost:8000/usersites',{ params: { userID: payload } } , config)
+      axios.get('http://18.217.93.185:8000/usersites',{ params: { userID: payload } } , config)
           .then(x => {
               resolve(x.data)
               status_flag += x.data.length

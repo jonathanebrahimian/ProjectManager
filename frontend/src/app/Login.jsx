@@ -14,7 +14,7 @@ const config = {
 
 async function loginUser(payload) {
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/login', JSON.stringify(payload), config)
+        axios.post('http://18.217.93.185:8000/login', JSON.stringify(payload), config)
             .then(x => {
                 resolve(x.data)
             })
@@ -23,7 +23,7 @@ async function loginUser(payload) {
 }
 async function addUsers(payload){
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/register', JSON.stringify(payload), config)
+        axios.post('http://18.217.93.185:8000/register', JSON.stringify(payload), config)
             .then(x => {
                 resolve(x.data)
             })

@@ -22,7 +22,7 @@ export class SiteDetails extends React.Component {
 
   async addUsers(payload){
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/register', JSON.stringify(payload), config)
+        axios.post('http://18.217.93.185:8000/register', JSON.stringify(payload), config)
             .then(x => {
                 resolve(x.data)
             })
@@ -31,7 +31,7 @@ export class SiteDetails extends React.Component {
 }
   async getSite(payload) {
     return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/sites/',{ params: { siteID: payload } } , config)
+        axios.get('http://18.217.93.185:8000/sites/',{ params: { siteID: payload } } , config)
             .then(x => {
                 resolve(x.data)
                 console.log(x.data)
@@ -79,7 +79,7 @@ export class SiteDetails extends React.Component {
             <Link to={`/goals/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Goals</Link>
             </p>
           </div>
-          <Register addUsers = {user => this.addUsers(user,this.state.siteID)}/>
+          <Register addUsers = {user => this.addUsers(user)}/>
         {/* </div>
       </div> */}
     </>

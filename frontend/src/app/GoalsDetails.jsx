@@ -69,14 +69,14 @@ export class GoalsDetails extends React.Component {
     componentDidMount(){
         this.state.isLoaded = true;
 		const fetchPosts = async() =>{
-            const res = await axios.get('http://localhost:8000/goals/',{ params: { siteID: this.siteID}},config);
+            const res = await axios.get('http://18.217.93.185:8000/goals/',{ params: { siteID: this.siteID}},config);
             this.setState({goals: res.data})
         }
         fetchPosts();
 	}
     componentDidUpdate(){
         const fetchPosts = async() =>{
-            const res = await axios.get('http://localhost:8000/goals/',{ params: { siteID: this.siteID}},config);
+            const res = await axios.get('http://18.217.93.185:8000/goals/',{ params: { siteID: this.siteID}},config);
             this.setState({goals: res.data})
         }
         fetchPosts();

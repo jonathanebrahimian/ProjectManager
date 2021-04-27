@@ -16,7 +16,7 @@ const config = {
 
 async function getBuilders() {
   return new Promise((resolve, reject) => {
-    axios.get('http://localhost:8000/builders/', config)
+    axios.get('http://18.217.93.185:8000/builders/', config)
         .then(x => {
           resolve(x.data)
           // console.log(x.data)

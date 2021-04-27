@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export class testApi {
-  url = 'http://localhost:8000'
+  url = 'http://18.217.93.185:8000'
 
   getValues() {
     return new Promise((resolve, reject) => {

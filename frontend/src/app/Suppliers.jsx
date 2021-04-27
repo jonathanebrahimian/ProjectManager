@@ -11,7 +11,7 @@ const config = {
 
 async function getSuppliers(payload) {
   return new Promise((resolve, reject) => {
-      axios.get('http://localhost:8000/suppliers/', config)
+      axios.get('http://18.217.93.185:8000/suppliers/', config)
           .then(x => {
               resolve(x.data)
           })
