@@ -26,7 +26,6 @@ export const ROUTES = [
   {path: '/site/create/:userID', component: CreateSite},
   {path: '/logout', component: LogOut},
   {path: '/login', component: Login},
-  {path: '/register', component: Register},
   {path: '/builders', component: Builders},
   {path: '/suppliers', component: Suppliers},
   {path: '/editMaterials/:materialID', component: EditMaterial},

@@ -1563,12 +1563,12 @@ module.exports = function routes(app, logger) {
                                 res.status(400).send('Problem inserting into table'); 
                               } else {
                                 connection.release();
-                                res.status(200).send("This is the userID created: " + userID);
+                                res.status(200).send("This is the userIDr created: " + userID);
                               }
                             });  
                           }else{
                             connection.release();
-                            res.status(200).send("This is the userID created: " + userID);
+                            res.status(200).send("This is the userIDs created: " + userID);
                           }                       
                         }
                       });

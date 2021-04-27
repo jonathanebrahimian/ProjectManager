@@ -4,6 +4,7 @@ import axios from 'axios';
 import {Register} from './Register';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
+import {testApi} from '../api/testApi';
 
 const config = {
     headers: {
@@ -14,6 +15,15 @@ const config = {
 async function loginUser(payload) {
     return new Promise((resolve, reject) => {
         axios.post('http://localhost:8000/login', JSON.stringify(payload), config)
+            .then(x => {
+                resolve(x.data)
+            })
+            .catch(x => reject(x.data))
+    })
+}
+async function addUsers(payload){
+    return new Promise((resolve, reject) => {
+        axios.post('http://localhost:8000/register', JSON.stringify(payload), config)
             .then(x => {
                 resolve(x.data)
             })
@@ -92,7 +102,7 @@ export function Login({ setToken }) {
                     <label htmlFor = "password">Password: </label>
                     <input type = "password" password = "password" id = "password"onChange={e => setPassword(e.target.value)} value={password}placeholder="Enter password"/>
                 </div>
-                <input type = "submit" style = {buttonStyle} value="Login" />
+                <input type = "submit" style = {buttonStyle} value="Login" /> 
             </div>
         </form>
     )

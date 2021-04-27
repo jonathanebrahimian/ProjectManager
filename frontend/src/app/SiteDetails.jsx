@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {Register} from './Register';
+
 
 const config = {
   headers: {
@@ -18,7 +20,15 @@ export class SiteDetails extends React.Component {
     title: "",
   }
 
-
+  async addUsers(payload){
+    return new Promise((resolve, reject) => {
+        axios.post('http://localhost:8000/register', JSON.stringify(payload), config)
+            .then(x => {
+                resolve(x.data)
+            })
+            .catch(x => reject(x.data))
+    })
+}
   async getSite(payload) {
     return new Promise((resolve, reject) => {
         axios.get('http://localhost:8000/sites/',{ params: { siteID: payload } } , config)
@@ -69,6 +79,7 @@ export class SiteDetails extends React.Component {
             <Link to={`/goals/${this.state.siteID}`} className = "btn btn-primary btn-lg">View Goals</Link>
             </p>
           </div>
+          <Register addUsers = {user => this.addUsers(user,this.state.siteID)}/>
         {/* </div>
       </div> */}
     </>
