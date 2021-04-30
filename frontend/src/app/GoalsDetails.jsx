@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import {Goals} from './Goals';
 import {testApi} from '../api/testApi';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const config = {
@@ -53,7 +52,6 @@ export class GoalsDetails extends React.Component {
                 <div className = "text-muted float-right">
                             {x.endDate}
                 </div>
-                {/* <button onClick = {()=>this.editGoal(x)} type = "button" class = "btn btn-warning btn-block">Edit Goal</button> */}
                 <button onClick = {()=>this.deleteGoal(x.goalID)} type = "button" class = "btn btn-primary">Finish Goal</button>
             </li>)
         }

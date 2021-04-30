@@ -32,23 +32,10 @@ async function addUsers(payload){
 }
 
 export function Login({ setToken }) {
-    // const [details, setDetails] = useState({username:"",password:""});
     const [username, setUserName] = useState()
     const [password, setPassword] = useState()
     let userID 
     let isLoggedIn = false
-    // const submit = (e) => {
-    // e.preventDefault();
-    // console.log(details);
-    // };
-
-    // async function loginUser(payload) {
-    //     return new Promise((resolve, reject) => {
-    //         axios.post('http://localhost:8000/login', JSON.stringify(payload))
-    //             .then(x => resolve(x.data))
-    //             .catch(x => reject(x.data))
-    //     })
-    // }
 
     const handleSubmit = async e => {
         e.preventDefault()

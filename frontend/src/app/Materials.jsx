@@ -32,14 +32,11 @@ export class Materials extends React.Component {
 	}
 
   componentDidMount() {
-    // if(!this.state.materials) {
       const id = this.props.location.state.id
       console.log(id)
-      // this.setState({ myArray: [...this.state.myArray, ...[1,2,3] ] }) //another array
       getMaterials(id).then(x => {
         this.setState({materials: [...this.state.materials, ...x]})
       })
-    // }
   }
 
   render() {
@@ -53,7 +50,6 @@ export class Materials extends React.Component {
           this.state.materials.map(material =>
             <ul class="list-group">
               <li class="list-group-item">{material.materialSupplied + ' (status: ' + material.status + ')'}<br /><Link className = "btn btn-primary btn-lg" to={'/editMaterials/' + material.materialID}>Edit Material</Link></li>
-              {/* <li class="list-group-item">{material.status}</li> */}
             </ul>
           )
         }

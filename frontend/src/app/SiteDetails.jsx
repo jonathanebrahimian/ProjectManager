@@ -60,8 +60,6 @@ export class SiteDetails extends React.Component {
 
   render() {
     return <>
-      {/* <div className="row">
-        <div className="col-sm-6"> */}
         {console.log(this.state.siteID)}
           <div class="jumbotron">
             <h1 class="display-4">{this.state.title}</h1>
@@ -80,8 +78,6 @@ export class SiteDetails extends React.Component {
             </p>
           </div>
           <Register addUsers = {user => this.addUsers(user)}/>
-        {/* </div>
-      </div> */}
     </>
   }
 }

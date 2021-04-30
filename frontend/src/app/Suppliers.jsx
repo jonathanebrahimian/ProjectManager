@@ -37,7 +37,6 @@ export class Suppliers extends React.Component {
               <li class="list-group-item">{supplier.firstName + ' ' + supplier.lastName}</li>
               <li class="list-group-item">{'Email: ' + supplier.email}</li>
               <li class="list-group-item">{'Material Supplied: ' + supplier.materialSupplied}</li>
-              {/* <li class="list-group-item">{material.status}</li> */}
             </ul>
           )
         }

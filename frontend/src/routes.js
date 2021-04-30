@@ -19,7 +19,6 @@ export const ROUTES = [
   {path: '/', exact: true, component: Home},
   {path: '/home/:userID', component: Home},
   {path: '/materials', component: Materials},
-  // {path: '/site/:siteID', component: SiteDetails},
   {path: '/goals/:siteID', component: GoalsDetails},
   {path: '/materials/:siteID', exact: true, component: Materials},
   {path: '/site/:siteID', exact: true, component: SiteDetails},

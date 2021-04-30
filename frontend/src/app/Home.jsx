@@ -29,8 +29,6 @@ export default function Home(props) {
     
   const [sites, setSites] = useState(undefined)
   const userID = props.match.params.userID
-  // const userID = 26
-
     useEffect(() => {
       if(!sites) {
         getSites(userID).then(x => {
@@ -76,8 +74,6 @@ export default function Home(props) {
       marginBottom: '10px'
     }
     return(<>
-        {/* {console.log(sites.length)} */}
-        {/* <div> */}
         {
           status_flag > 1 ? <Link class="btn btn-primary" style={create_site_button} to={'/site/create/' + userID}>Create a Site</Link>: null
         }
@@ -91,6 +87,5 @@ export default function Home(props) {
           status_flag > 1 ? <Link class="btn btn-primary" style={get_builders_button} to={'/builders/'}>Get a list of Builders</Link>: null
         }
         <Site sites={sites || []} />
-        {/* </div> */}
     </>)
 }

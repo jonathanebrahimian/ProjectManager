@@ -32,14 +32,11 @@ export class Roster extends React.Component {
 	}
 
   componentDidMount() {
-    // if(!this.state.materials) {
       const id = this.props.match.params.siteID
       console.log(id)
-      // this.setState({ myArray: [...this.state.myArray, ...[1,2,3] ] }) //another array
       getRoster(id).then(x => {
         this.setState({rosters: [...this.state.rosters, ...x]})
       })
-    // }
   }
 
   render() {
@@ -50,7 +47,6 @@ export class Roster extends React.Component {
           this.state.rosters.map(roster =>
             <ul class="list-group">
               <li class="list-group-item">{roster.firstName + ' ' + roster.lastName}</li>
-              {/* <li class="list-group-item">{material.status}</li> */}
             </ul>
           )
         }
